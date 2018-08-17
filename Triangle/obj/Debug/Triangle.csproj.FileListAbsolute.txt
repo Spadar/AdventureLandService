@@ -1,0 +1,18 @@
+C:\Users\lorna\Documents\triangle\sourceCode\sourceCode\Triangle.NET\Triangle\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\triangle\sourceCode\sourceCode\Triangle.NET\Triangle\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\triangle\sourceCode\sourceCode\Triangle.NET\Triangle\obj\Debug\Triangle.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\triangle\sourceCode\sourceCode\Triangle.NET\Triangle\obj\Debug\Triangle.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\triangle\sourceCode\sourceCode\Triangle.NET\Triangle\obj\Debug\Triangle.dll
+C:\Users\lorna\Documents\triangle\sourceCode\sourceCode\Triangle.NET\Triangle\obj\Debug\Triangle.pdb
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\Triangle\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\Triangle\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\Triangle\obj\Debug\Triangle.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\Triangle\obj\Debug\Triangle.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\Triangle\obj\Debug\Triangle.dll
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\Triangle\obj\Debug\Triangle.pdb
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.dll
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.pdb

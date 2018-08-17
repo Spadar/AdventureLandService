@@ -1,0 +1,13 @@
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\AdventureLandLibrary.pdb
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\Newtonsoft.Json.xml
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\obj\Debug\AdventureLandLibrary.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\obj\Debug\AdventureLandLibrary.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\obj\Debug\AdventureLandLibrary.csproj.CopyComplete
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\obj\Debug\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\obj\Debug\AdventureLandLibrary.pdb
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\AdventureLandLibrary.dll.config
+C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\AdventureLandLibrary\bin\Debug\JsonDiffPatchDotNet.dll
