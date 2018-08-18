@@ -11,7 +11,7 @@ namespace LibraryTester
     {
         static void Main(string[] args)
         {
-            var map = new Map("desertland");
+            var map = new Map("level1");
         }
     }
 }

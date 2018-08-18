@@ -61,132 +61,21 @@ namespace AdventureLandLibrary.Geometry
             FillExterior();
         }
 
-        public void ErodeMap()
+        public void FillMeshEdges(TriangleNet.Mesh mesh)
         {
-            var subPolygons = BuildSubPolygons();
-
-            foreach(var subPoly in subPolygons)
+            foreach(var seg in mesh.Segments)
             {
-                foreach(var line in subPoly.contour.GetSegments())
+                var v1 = new Point(seg.GetVertex(0));
+                var v2 = new Point(seg.GetVertex(1));
+
+                var line = new Line(v1, v2);
+
+                foreach(var point in line.Points)
                 {
-                    var p1 = new Point(line.GetVertex(0));
-                    var p2 = new Point(line.GetVertex(1));
-
-                    var rect = new Rect(new Line(p1, p2), 9, 6);
-
-                    foreach(var point in rect.Points)
-                    {
-                        if(isOffsetPointWithinBounds(point))
-                        {
-                            if(points[point.X, point.Y] == PointType.Interior)
-                            {
-                                points[point.X, point.Y] = PointType.Eroded;
-                            }
-                        }
-                    }
+                    points[point.X, point.Y] = PointType.Interior;
                 }
             }
         }
-
-        //public PolygonPart[] BuildErodedSubPolygons()
-        //{
-        //    var vertices = IdentifyErodedVertices();
-
-        //    List<PolygonPart> parts = new List<PolygonPart>();
-
-        //    List<Point> availableVertices = new List<Point>();
-        //    availableVertices.AddRange(vertices);
-
-        //    bool[,] visitedPoints = new bool[points.GetLength(0), points.GetLength(1)];
-
-        //    while (availableVertices.Count > 0)
-        //    {
-        //        var currentShape = new List<Point>();
-        //        var currentPoint = FindTopLeftMostPoint(availableVertices);
-        //        currentShape.Add(currentPoint);
-        //        availableVertices.Remove(currentPoint);
-
-        //        while (currentPoint != null)
-        //        {
-        //            var newVertex = FindNextVertex(currentPoint, visitedPoints, availableVertices, PointType.Eroded);
-
-        //            if (newVertex != null)
-        //            {
-        //                currentShape.Add(newVertex);
-        //                availableVertices.Remove(newVertex);
-        //            }
-        //            currentPoint = newVertex;
-        //        }
-
-        //        if (currentShape.Count > 2)
-        //        {
-        //            var curPart = new PolygonPart(currentShape.ToArray());
-
-        //            parts.Add(curPart);
-        //        }
-        //    }
-
-        //    for (var i = 0; i < parts.Count; i++)
-        //    {
-        //        var polyPart = parts[i];
-
-        //        var insideCount = 0;
-        //        for (var ix = 0; ix < parts.Count; ix++)
-        //        {
-        //            if (ix != i)
-        //            {
-        //                var polyPartCompare = parts[ix];
-
-        //                //No need to check every vertex because of how we generated these vertices
-        //                if (TriangleNet.Geometry.Contour.IsPointInPolygon(new TriangleNet.Geometry.Point(polyPart.Vertices[0].X, polyPart.Vertices[0].Y), polyPartCompare.contour.Points))
-        //                {
-        //                    insideCount++;
-        //                    break;
-        //                }
-        //            }
-        //        }
-
-        //        //0 would be outer polygons. >0 would be innner... Nested polygons would have counts >1
-        //        if (insideCount > 0)
-        //        {
-        //            polyPart.IsHole = true;
-        //        }
-
-        //        polyPart.Refresh();
-        //    }
-
-        //    foreach (var part in parts)
-        //    {
-        //        if (part.Vertices.Length < 4)
-        //        {
-        //            var test = true;
-        //        }
-        //    }
-
-        //    return parts.ToArray();
-        //}
-
-        //public Polygon BuildErodedPolygon()
-        //{
-        //    var polygon = new Polygon(BuildErodedSubPolygons());
-
-        //    return polygon;
-        //}
-
-        //public TriangleNet.Mesh BuildErodedMesh()
-        //{
-        //    var polygon = BuildErodedPolygon();
-
-        //    var constraintOptions = new TriangleNet.Meshing.ConstraintOptions();
-
-        //    var qualityOptions = new TriangleNet.Meshing.QualityOptions();
-        //    qualityOptions.MinimumAngle = 20;
-        //    qualityOptions.MaximumAngle = 180;
-
-
-        //    return (TriangleNet.Mesh)TriangleNet.Geometry.ExtensionMethods.Triangulate(polygon.polygon, constraintOptions, qualityOptions);
-
-        //}
 
         public PolygonPart[] BuildSubPolygons()
         {
@@ -249,7 +138,7 @@ namespace AdventureLandLibrary.Geometry
                 var interiorPoint = polyPart.contour.FindInteriorPoint();
 
                 //0 would be outer polygons. >0 would be innner... Nested polygons would have counts >1
-                if (insideCount > 0 && points[(int)interiorPoint.X, (int)interiorPoint.Y] == PointType.Interior)
+                if (insideCount > 0 && points[(int)interiorPoint.X, (int)interiorPoint.Y] != PointType.Interior)
                 {
                     polyPart.IsHole = true;
                 }
@@ -456,6 +345,7 @@ namespace AdventureLandLibrary.Geometry
                 for (var y = 0; y < height; y++)
                 {
                     var pointType = points[x, y];
+
                     if (pointType == PointType.Wall || pointType == PointType.Eroded)
                     {
                         var neighbors = FindPointNeighbors(new Point(x, y));
@@ -634,7 +524,7 @@ namespace AdventureLandLibrary.Geometry
                 var offsetPoint = new Point(point.X + xOffset, point.Y + yOffset);
                 if (isOffsetPointWithinBounds(offsetPoint))
                 {
-                    if (points[offsetPoint.X, offsetPoint.Y] == PointType.Undefined)
+                    if (points[offsetPoint.X, offsetPoint.Y] != PointType.Wall)
                     {
                         points[offsetPoint.X, offsetPoint.Y] = PointType.Eroded;
                     }
@@ -679,7 +569,7 @@ namespace AdventureLandLibrary.Geometry
 
             if (isOffsetPointWithinBounds(offsetPoint))
             {
-                if (points[point.X, point.Y] == PointType.Interior)
+                if (points[offsetPoint.X, offsetPoint.Y] == PointType.Interior)
                 {
                     return true;
                 }
@@ -717,7 +607,29 @@ namespace AdventureLandLibrary.Geometry
             return neighbors;
         }
 
-        public System.Drawing.Bitmap ToBitmap()
+        public bool IsInterior(Line line)
+        {
+            foreach (var point in line.Points)
+            {
+                var offsetPoint = new Point(point.X + xOffset, point.Y + yOffset);
+
+                if (isOffsetPointWithinBounds(offsetPoint))
+                {
+                    if (points[offsetPoint.X, offsetPoint.Y] != PointType.Interior)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public System.Drawing.Bitmap ToBitmap(Point[] path)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Width, Height);
 
@@ -752,13 +664,6 @@ namespace AdventureLandLibrary.Geometry
                 }
             }
 
-            var interiorVertices = IdentifyVertices();
-
-            foreach (var vertex in interiorVertices)
-            {
-                lockbitmap.SetPixel(vertex.X, vertex.Y, System.Drawing.Color.Red);
-            }
-
             var mesh = BuildMesh();
 
             var meshLines = new List<Line>();
@@ -783,6 +688,19 @@ namespace AdventureLandLibrary.Geometry
                 foreach (var point in line.Points)
                 {
                     lockbitmap.SetPixel(point.X, point.Y, System.Drawing.Color.Red);
+                }
+            }
+
+            for(var i = 0; i < path.Length - 1; i++)
+            {
+                var p1 = path[i];
+                var p2 = path[i + 1];
+
+                var line = new Line(p1, p2);
+
+                foreach (var point in line.Points)
+                {
+                    lockbitmap.SetPixel(point.X + xOffset, point.Y + yOffset, System.Drawing.Color.Blue);
                 }
             }
 

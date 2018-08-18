@@ -35,5 +35,25 @@ namespace AdventureLandLibrary.Geometry
         {
             return Math.Sqrt(Math.Pow((p2.X - X), 2) + Math.Pow((p2.Y - Y), 2));
         }
+
+        //public override int GetHashCode()
+        //{
+        //    int hash = 17;
+        //    // Suitable nullity checks etc, of course :)
+        //    hash = hash * 23 + X.GetHashCode();
+        //    hash = hash * 23 + Y.GetHashCode();
+        //    return hash;
+        //}
+
+        //public override bool Equals(object obj)
+        //{
+        //    var otherPoint = obj as Point;
+        //    if (otherPoint == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    return X == otherPoint.X && Y == otherPoint.Y;
+        //}
     }
 }

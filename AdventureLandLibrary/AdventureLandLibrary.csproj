@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dijkstra.NET, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dijkstra.NET.1.1.0\lib\net40\Dijkstra.NET.dll</HintPath>
+    </Reference>
     <Reference Include="JsonDiffPatchDotNet, Version=2.1.0.0, Culture=neutral, PublicKeyToken=a407b9994a6d66d5, processorArchitecture=MSIL">
       <HintPath>..\packages\JsonDiffPatch.Net.2.1.0\lib\net45\JsonDiffPatchDotNet.dll</HintPath>
     </Reference>
@@ -53,11 +56,13 @@
     <Compile Include="Geometry\Line.cs" />
     <Compile Include="Geometry\Point.cs" />
     <Compile Include="Geometry\PointMap.cs" />
+    <Compile Include="Geometry\PointStruct.cs" />
     <Compile Include="Geometry\Polygon.cs" />
     <Compile Include="Geometry\PolygonPart.cs" />
     <Compile Include="Geometry\Rect.cs" />
     <Compile Include="Global\Loader.cs" />
     <Compile Include="ImageManipulation\LockBitmap.cs" />
+    <Compile Include="Pathfinding\MapGraph.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

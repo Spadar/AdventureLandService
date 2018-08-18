@@ -13,3 +13,19 @@ C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Librar
 C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\LibraryTester\obj\Debug\LibraryTester.exe
 C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\LibraryTester\obj\Debug\LibraryTester.pdb
 C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\LibraryTester\bin\Debug\AdventureLandLibrary.dll.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\LibraryTester.exe.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\LibraryTester.exe
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\LibraryTester.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\Newtonsoft.Json.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\AdventureLandLibrary.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\AdventureLandLibrary.dll.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\Newtonsoft.Json.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\obj\Debug\LibraryTester.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\obj\Debug\LibraryTester.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\obj\Debug\LibraryTester.csproj.CopyComplete
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\obj\Debug\LibraryTester.exe
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\obj\Debug\LibraryTester.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\LibraryTester\bin\Debug\Dijkstra.NET.dll

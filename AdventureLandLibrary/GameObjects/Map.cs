@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using AdventureLandLibrary.Geometry;
 using AdventureLandLibrary.Global;
+using AdventureLandLibrary.Pathfinding;
 using Newtonsoft.Json.Linq;
 
 namespace AdventureLandLibrary.GameObjects
@@ -28,7 +29,9 @@ namespace AdventureLandLibrary.GameObjects
 
         public Line[] Lines;
 
-        public Polygon[] Polygons;
+        public PolygonPart[] PolyParts;
+
+        public Polygon Polygon;
 
         public Map(string MapID)
         {
@@ -37,8 +40,11 @@ namespace AdventureLandLibrary.GameObjects
 
             if(mapData != null)
             {
-                MinX = (int)((dynamic)mapData["min_x"]);
-                MinY = (int)((dynamic)mapData["min_y"]);
+                var MinX = (int)((dynamic)mapData["min_x"]);
+                var MinY = (int)((dynamic)mapData["min_y"]);
+
+                var MaxX = (int)((dynamic)mapData["max_x"]);
+                var MaxY = (int)((dynamic)mapData["max_y"]);
 
                 Width = Math.Abs((int)((dynamic)mapData["max_x"])) + Math.Abs((int)((dynamic)mapData["min_x"]));
                 Height = Math.Abs((int)((dynamic)mapData["max_y"])) + Math.Abs((int)((dynamic)mapData["min_y"]));
@@ -89,13 +95,38 @@ namespace AdventureLandLibrary.GameObjects
 
                 PointMap.FillExterior();
 
-                //PointMap.ErodeMap();
+                if(PointMap.IsInsideMap(new Point(MinX, MinY)))
+                {
+                    //Draw map edges as walls to contain map.
+                    var p1 = new Point(MinX, MinY);
+                    var p2 = new Point(MinX, MaxY);
+                    var p3 = new Point(MaxX, MaxY);
+                    var p4 = new Point(MaxX, MinY);
 
-                //PointMap.RefillInterior(spawnPoints);
+                    PointMap.DrawWall(new Line(p1, p2), 9, 6);
+                    PointMap.DrawWall(new Line(p2, p3), 9, 6);
+                    PointMap.DrawWall(new Line(p3, p4), 9, 6);
+                    PointMap.DrawWall(new Line(p4, p1), 9, 6);
+                }
 
-                //var poly = PointMap.BuildPolygon();
+                this.PolyParts = PointMap.BuildSubPolygons();
 
-                SaveBitmap();
+                var mesh = PointMap.BuildMesh();
+
+                PointMap.FillMeshEdges(mesh);
+
+                var graph = new MapGraph(mesh, xOffset, yOffset);
+                System.Diagnostics.Stopwatch test = new System.Diagnostics.Stopwatch();
+                test.Start();
+
+                //var pathPoints = graph.GetPath(new Point(0, 0), new Point(785, -637));
+
+                var pathPoints = graph.GetPath(new Point(0, 9), new Point(-863, 89));
+
+                var smooth = SmoothPath(pathPoints);
+
+                test.Stop();
+                SaveBitmap(pathPoints);
             }
             else
             {
@@ -103,7 +134,39 @@ namespace AdventureLandLibrary.GameObjects
             }
         }
 
-        public void SaveBitmap()
+        public Point[] SmoothPath(Point[] path)
+        {
+            List<Point> smoothedPath = new List<Point>();
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                var startPoint = path[i];
+                smoothedPath.Add(startPoint);
+
+                    for (int x = i + 1; x < path.Length; x++)
+                    {
+
+                        var skippedPoint = path[x];
+
+                        var line = new Line(startPoint, skippedPoint);
+
+                        if (PointMap.IsInterior(line))
+                        {
+                            i = x - 1;
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    }
+            }
+
+            return smoothedPath.ToArray();
+
+        }
+
+        public void SaveBitmap(Point[] points)
         {
             var mapDirectory = new DirectoryInfo(Loader.GetCurrentVersionDirectory() + @"\maps\");
 
@@ -113,7 +176,7 @@ namespace AdventureLandLibrary.GameObjects
             }
 
             var filename = mapDirectory.FullName + MapID + ".png";
-            var test = PointMap.ToBitmap();
+            var test = PointMap.ToBitmap(points);
 
             test.Save(filename);
         }

@@ -58,31 +58,72 @@ namespace AdventureLandLibrary.Geometry
         private void GetPoints()
         {
 
-                var limit = Math.Ceiling(P1.Distance(P2));
-                var angle = P1.Angle(P2);
+            //var limit = Math.Ceiling(P1.Distance(P2));
+            //var angle = P1.Angle(P2);
 
-                double xDir = Math.Cos(angle);
-                double yDir = Math.Sin(angle);
+            //double xDir = Math.Cos(angle);
+            //double yDir = Math.Sin(angle);
 
-                HashSet<Point> pointList = new HashSet<Point>();
+            //HashSet<Point> pointList = new HashSet<Point>();
 
-                var curPoint = P1;
-                double curX = P1.X;
-                double curY = P1.Y;
+            //var curPoint = P1;
+            //double curX = P1.X;
+            //double curY = P1.Y;
 
-                while ((curPoint.X != P2.X || curPoint.Y != P2.Y) && pointList.Count <= limit)
+            //while ((curPoint.X != P2.X || curPoint.Y != P2.Y) && pointList.Count <= limit)
+            //{
+            //    pointList.Add(curPoint);
+            //    curX = curX + xDir;
+            //    curY = curY + yDir;
+            //    curPoint = new Point((int)curX, (int)curY);
+            //}
+
+            //pointList.Add(P2);
+
+            //_points = new Point[pointList.Count];
+            //pointList.CopyTo(_points);
+
+            List<Point> points = new List<Point>();
+
+            int x2 = P2.X;
+            int x = P1.X;
+            int y2 = P2.Y;
+            int y = P1.Y;
+
+            int w = x2 - x;
+            int h = y2 - y;
+            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0;
+            if (w < 0) dx1 = -1; else if (w > 0) dx1 = 1;
+            if (h < 0) dy1 = -1; else if (h > 0) dy1 = 1;
+            if (w < 0) dx2 = -1; else if (w > 0) dx2 = 1;
+            int longest = Math.Abs(w);
+            int shortest = Math.Abs(h);
+            if (!(longest > shortest))
+            {
+                longest = Math.Abs(h);
+                shortest = Math.Abs(w);
+                if (h < 0) dy2 = -1; else if (h > 0) dy2 = 1;
+                dx2 = 0;
+            }
+            int numerator = longest >> 1;
+            for (int i = 0; i <= longest; i++)
+            {
+                points.Add(new Point(x, y));
+                numerator += shortest;
+                if (!(numerator < longest))
                 {
-                    pointList.Add(curPoint);
-                    curX = curX + xDir;
-                    curY = curY + yDir;
-                    curPoint = new Point((int)curX, (int)curY);
+                    numerator -= longest;
+                    x += dx1;
+                    y += dy1;
                 }
+                else
+                {
+                    x += dx2;
+                    y += dy2;
+                }
+            }
 
-                pointList.Add(P2);
-
-                _points = new Point[pointList.Count];
-                pointList.CopyTo(_points);
-
+            _points = points.ToArray();
         }
     }
 }
