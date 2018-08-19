@@ -629,7 +629,7 @@ namespace AdventureLandLibrary.Geometry
             return true;
         }
 
-        public System.Drawing.Bitmap ToBitmap(Point[] path)
+        public System.Drawing.Bitmap ToBitmap(TriangleNet.Mesh mesh)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Width, Height);
 
@@ -664,7 +664,12 @@ namespace AdventureLandLibrary.Geometry
                 }
             }
 
-            var mesh = BuildMesh();
+            //var verts = IdentifyVertices();
+
+            //foreach(var vert in verts)
+            //{
+            //    lockbitmap.SetPixel(vert.X, vert.Y, System.Drawing.Color.Red);
+            //}
 
             var meshLines = new List<Line>();
 
@@ -683,6 +688,15 @@ namespace AdventureLandLibrary.Geometry
                 meshLines.Add(edge3);
             }
 
+
+            //foreach (var edge in mesh.Segments)
+            //{
+            //    var v1 = new Point(edge.GetVertex(0));
+            //    var v2 = new Point(edge.GetVertex(1));
+
+            //    meshLines.Add(new Line(v1, v2));
+            //}
+
             foreach (var line in meshLines)
             {
                 foreach (var point in line.Points)
@@ -691,18 +705,31 @@ namespace AdventureLandLibrary.Geometry
                 }
             }
 
-            for(var i = 0; i < path.Length - 1; i++)
-            {
-                var p1 = path[i];
-                var p2 = path[i + 1];
+            //for(var i = 0; i < path.Length - 1; i++)
+            //{
+            //    var p1 = path[i];
+            //    var p2 = path[i + 1];
 
-                var line = new Line(p1, p2);
+            //    var line = new Line(p1, p2);
 
-                foreach (var point in line.Points)
-                {
-                    lockbitmap.SetPixel(point.X + xOffset, point.Y + yOffset, System.Drawing.Color.Blue);
-                }
-            }
+            //    foreach (var point in line.Points)
+            //    {
+            //        lockbitmap.SetPixel(point.X + xOffset, point.Y + yOffset, System.Drawing.Color.Blue);
+            //    }
+            //}
+
+            //for (var i = 0; i < smooth.Length - 1; i++)
+            //{
+            //    var p1 = smooth[i];
+            //    var p2 = smooth[i + 1];
+
+            //    var line = new Line(p1, p2);
+
+            //    foreach (var point in line.Points)
+            //    {
+            //        lockbitmap.SetPixel(point.X + xOffset, point.Y + yOffset, System.Drawing.Color.Purple);
+            //    }
+            //}
 
             lockbitmap.UnlockBits();
 

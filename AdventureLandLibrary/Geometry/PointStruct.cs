@@ -17,6 +17,12 @@ namespace AdventureLandLibrary.Geometry
             Y = y;
         }
 
+        public PointStruct(TriangleNet.Geometry.Point point)
+        {
+            this.X = (int)point.X;
+            this.Y = (int)point.Y;
+        }
+
         public PointStruct(Point point)
         {
             X = point.X;

@@ -16,3 +16,8 @@ C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triang
 C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.csproj.CoreCompileInputs.cache
 C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.dll
 C:\Users\lorna\Documents\Visual Studio 2017\Projects\AdventureLandLibrary\Triangle\obj\Debug\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Debug\Triangle.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Debug\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Debug\Triangle.pdb

@@ -1,0 +1,59 @@
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\DataViewer.exe.config
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\DataViewer.exe
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\DataViewer.pdb
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\AdventureLandMeshGenerator.dll
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\Newtonsoft.Json.dll
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\AdventureLandMeshGenerator.pdb
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\Newtonsoft.Json.xml
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\MainWindow.g.cs
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\App.g.cs
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer_MarkupCompile.cache
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer_MarkupCompile.lref
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\MainWindow.baml
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.g.resources
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.Properties.Resources.resources
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.csproj.GenerateResource.Cache
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.exe
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.pdb
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\WriteableBitmapEx.Wpf.dll
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\WriteableBitmapEx.Wpf.pdb
+c:\users\lorna\documents\visual studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\WriteableBitmapEx.Wpf.xml
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\obj\Debug\DataViewer.csproj.CopyComplete
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\SharpNav.dll
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\YamlDotNet.dll
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\AdventureLandMeshGenerator.dll.config
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\SharpNav.pdb
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\SharpNav.xml
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\YamlDotNet.pdb
+C:\Users\lorna\Documents\Visual Studio 2015\Projects\AdventureLandMeshGenerator\DataViewer\bin\Debug\YamlDotNet.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\MainWindow.g.cs
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\App.g.cs
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer_MarkupCompile.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer_MarkupCompile.lref
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.exe
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\DataViewer.exe.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\DataViewer.exe
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\DataViewer.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\WriteableBitmapEx.Wpf.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\Dijkstra.NET.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\AdventureLandLibrary.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\AdventureLandLibrary.dll.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\WriteableBitmapEx.Wpf.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\WriteableBitmapEx.Wpf.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\bin\Debug\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\MainWindow.baml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.g.resources
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.Properties.Resources.resources
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.csproj.GenerateResource.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\DataViewer\obj\Debug\DataViewer.csproj.CopyComplete

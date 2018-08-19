@@ -55,6 +55,39 @@ namespace AdventureLandLibrary.Geometry
             this.P2 = p2;
         }
 
+        /// <summary>
+        /// Sourced from http://silverbling.blogspot.com/2010/06/2d-line-segment-intersection-detection.html
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        public bool Intersects(Line line)
+        {
+            float firstLineSlopeX, firstLineSlopeY, secondLineSlopeX, secondLineSlopeY;
+
+            firstLineSlopeX = this.P2.X - this.P1.X;
+            firstLineSlopeY = this.P2.Y - this.P1.Y;
+
+            secondLineSlopeX = line.P2.X - line.P1.X;
+            secondLineSlopeY = line.P2.Y - line.P1.Y;
+
+            float s, t;
+            s = (-firstLineSlopeY * (this.P1.X - line.P1.X) + firstLineSlopeX * (this.P1.Y - line.P1.Y)) / (-secondLineSlopeX * firstLineSlopeY + firstLineSlopeX * secondLineSlopeY);
+            t = (secondLineSlopeX * (this.P1.Y - line.P1.Y) - secondLineSlopeY * (this.P1.X - line.P1.X)) / (-secondLineSlopeX * firstLineSlopeY + firstLineSlopeX * secondLineSlopeY);
+
+            if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+            {
+                //float intersectionPointX = this.P1.X + (t * firstLineSlopeX);
+                //float intersectionPointY = this.P1.Y + (t * firstLineSlopeY);
+
+                //// Collision detected
+                //intersectionPoint = new Vector3(intersectionPointX, intersectionPointY, 0);
+
+                return true;
+            }
+
+            return false; // No collision
+        }
+
         private void GetPoints()
         {
 

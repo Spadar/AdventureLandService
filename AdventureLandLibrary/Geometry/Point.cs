@@ -18,6 +18,12 @@ namespace AdventureLandLibrary.Geometry
             this.Y = y;
         }
 
+        public Point(TriangleNet.Geometry.Point point)
+        {
+            this.X = (int)point.X;
+            this.Y = (int)point.Y;
+        }
+
         public Point(TriangleNet.Geometry.Vertex vertex)
         {
             this.X = (int)vertex.X;

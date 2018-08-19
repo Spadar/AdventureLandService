@@ -113,6 +113,25 @@ namespace TriangleNet.Topology
             return subsegs[index].seg.hash == Mesh.DUMMY ? null : subsegs[index].seg;
         }
 
+        public Point GetCentroid()
+        {
+                int count = this.vertices.Length;
+
+                var point = new Point(0.0, 0.0);
+
+                for (int i = 0; i < count; i++)
+                {
+                    point.x += this.vertices[i].x;
+                    point.y += this.vertices[i].y;
+                }
+
+                // If the contour is convex, use its centroid.
+                point.x /= count;
+                point.y /= count;
+
+                return point;
+        }
+
         #endregion
 
         public override int GetHashCode()

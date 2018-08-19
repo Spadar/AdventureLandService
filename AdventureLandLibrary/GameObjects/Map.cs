@@ -22,16 +22,11 @@ namespace AdventureLandLibrary.GameObjects
         public int Width;
         public int Height;
 
-        private PointMap _originalPointMap;
         public PointMap PointMap;
 
-        public Point[] Vertices;
+        private TriangleNet.Mesh Mesh;
 
-        public Line[] Lines;
-
-        public PolygonPart[] PolyParts;
-
-        public Polygon Polygon;
+        private MapGraph graph;
 
         public Map(string MapID)
         {
@@ -49,8 +44,8 @@ namespace AdventureLandLibrary.GameObjects
                 Width = Math.Abs((int)((dynamic)mapData["max_x"])) + Math.Abs((int)((dynamic)mapData["min_x"]));
                 Height = Math.Abs((int)((dynamic)mapData["max_y"])) + Math.Abs((int)((dynamic)mapData["min_y"]));
 
-                int xOffset = Math.Abs((int)((dynamic)mapData["min_x"]));
-                int yOffset = Math.Abs((int)((dynamic)mapData["min_y"]));
+                OffsetX = Math.Abs((int)((dynamic)mapData["min_x"]));
+                OffsetY = Math.Abs((int)((dynamic)mapData["min_y"]));
 
                 List<Line> lines = new List<Line>();
 
@@ -73,11 +68,9 @@ namespace AdventureLandLibrary.GameObjects
                     }
                 }
 
-                Lines = lines.ToArray();
+                PointMap = new PointMap(Width, Height, OffsetX, OffsetY);
 
-                PointMap = new PointMap(Width, Height, xOffset, yOffset);
-
-                foreach (var line in Lines)
+                foreach (var line in lines)
                 {
                     PointMap.DrawWall(line, 9, 6);
                 }
@@ -95,8 +88,8 @@ namespace AdventureLandLibrary.GameObjects
 
                 PointMap.FillExterior();
 
-                if(PointMap.IsInsideMap(new Point(MinX, MinY)))
-                {
+                //if(PointMap.IsInsideMap(new Point(MinX, MinY)))
+                //{
                     //Draw map edges as walls to contain map.
                     var p1 = new Point(MinX, MinY);
                     var p2 = new Point(MinX, MaxY);
@@ -107,31 +100,39 @@ namespace AdventureLandLibrary.GameObjects
                     PointMap.DrawWall(new Line(p2, p3), 9, 6);
                     PointMap.DrawWall(new Line(p3, p4), 9, 6);
                     PointMap.DrawWall(new Line(p4, p1), 9, 6);
-                }
+                //}
 
-                this.PolyParts = PointMap.BuildSubPolygons();
+                Mesh = PointMap.BuildMesh();
 
-                var mesh = PointMap.BuildMesh();
+                PointMap.FillMeshEdges(Mesh);
 
-                PointMap.FillMeshEdges(mesh);
 
-                var graph = new MapGraph(mesh, xOffset, yOffset);
+                graph = new MapGraph(Mesh, OffsetX, OffsetY);
+
                 System.Diagnostics.Stopwatch test = new System.Diagnostics.Stopwatch();
                 test.Start();
 
+                //TestMain
                 //var pathPoints = graph.GetPath(new Point(0, 0), new Point(785, -637));
+                //Test Level1
+                //var pathPoints = graph.GetPath(new Point(0, 9), new Point(-863, 89));
 
-                var pathPoints = graph.GetPath(new Point(0, 9), new Point(-863, 89));
+                var pathPoints = graph.GetPath(new Point(1536, -161), new Point(1032, -1802));
 
                 var smooth = SmoothPath(pathPoints);
 
                 test.Stop();
-                SaveBitmap(pathPoints);
+                SaveBitmap(Mesh);
             }
             else
             {
                 throw new Exception("Map Doesn't Exist.");
             }
+        }
+
+        public Point[] FindPath(Point start, Point end)
+        {
+            return graph.GetPath(start, end);
         }
 
         public Point[] SmoothPath(Point[] path)
@@ -166,7 +167,12 @@ namespace AdventureLandLibrary.GameObjects
 
         }
 
-        public void SaveBitmap(Point[] points)
+        public System.Drawing.Bitmap GetBitmap()
+        {
+            return PointMap.ToBitmap(Mesh);
+        }
+
+        public void SaveBitmap(TriangleNet.Mesh mesh)
         {
             var mapDirectory = new DirectoryInfo(Loader.GetCurrentVersionDirectory() + @"\maps\");
 
@@ -176,7 +182,7 @@ namespace AdventureLandLibrary.GameObjects
             }
 
             var filename = mapDirectory.FullName + MapID + ".png";
-            var test = PointMap.ToBitmap(points);
+            var test = PointMap.ToBitmap(mesh);
 
             test.Save(filename);
         }

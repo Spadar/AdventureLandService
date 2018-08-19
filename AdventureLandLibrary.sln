@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Triangle", "Triangle\Triang
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureLandLibrary", "AdventureLandLibrary\AdventureLandLibrary.csproj", "{17C892FC-06FB-4CE5-A754-CFA2AEB87564}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataViewer", "DataViewer\DataViewer.csproj", "{79982E2C-39E6-4AC5-B81E-2F644217B46E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{17C892FC-06FB-4CE5-A754-CFA2AEB87564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17C892FC-06FB-4CE5-A754-CFA2AEB87564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17C892FC-06FB-4CE5-A754-CFA2AEB87564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79982E2C-39E6-4AC5-B81E-2F644217B46E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79982E2C-39E6-4AC5-B81E-2F644217B46E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79982E2C-39E6-4AC5-B81E-2F644217B46E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79982E2C-39E6-4AC5-B81E-2F644217B46E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
