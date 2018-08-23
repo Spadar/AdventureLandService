@@ -675,6 +675,21 @@ namespace AdventureLandLibrary.Geometry
 
             foreach (var tri in mesh.Triangles)
             {
+                var centroid = new Point(tri.GetCentroid());
+
+                for (var i = 0; i < 3; i++)
+                {
+                    var neighbor = tri.GetNeighbor(i);
+
+                    if (neighbor != null)
+                    {
+                        var ncentroid = new Point(((TriangleNet.Topology.Triangle)neighbor).GetCentroid());
+
+                        var centroidLine = new Line(centroid, ncentroid);
+                        meshLines.Add(centroidLine);
+                    }
+                }
+
                 var v1 = new Point(tri.GetVertex(0));
                 var v2 = new Point(tri.GetVertex(1));
                 var v3 = new Point(tri.GetVertex(2));
@@ -683,9 +698,17 @@ namespace AdventureLandLibrary.Geometry
                 var edge2 = new Line(v2, v3);
                 var edge3 = new Line(v3, v1);
 
+                var c1 = new Line(v1, centroid);
+                var c2 = new Line(v2, centroid);
+                var c3 = new Line(v3, centroid);
+
                 meshLines.Add(edge1);
                 meshLines.Add(edge2);
                 meshLines.Add(edge3);
+
+                meshLines.Add(c1);
+                meshLines.Add(c2);
+                meshLines.Add(c3);
             }
 
 

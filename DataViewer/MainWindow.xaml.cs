@@ -226,6 +226,8 @@ namespace DataViewer
                 currentPath = new List<Line>();
 
                 var pathStartPoint = GetMouseMapPoint();
+                System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+                timer.Start();
                 var path = currentMap.FindPath(pathStartPoint, PathEndPoint);
 
                 if (chkSmooth.IsChecked.HasValue && chkSmooth.IsChecked.Value)
@@ -233,6 +235,8 @@ namespace DataViewer
                     var smoothedpath = currentMap.SmoothPath(path);
                     path = smoothedpath;
                 }
+                timer.Stop();
+                PathTime.Content = timer.ElapsedMilliseconds;
 
                 for (var i = 0; i < path.Length - 1; i++)
                 {

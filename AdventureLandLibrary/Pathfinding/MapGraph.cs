@@ -22,10 +22,10 @@ namespace AdventureLandLibrary.Pathfinding
         {
             this.xOffset = xOffset;
             this.yOffset = yOffset;
-            CreateVertexGraph(mesh);
+            CreateCentroidVertexGraph(mesh);
 
             List<Line> edges = new List<Line>();
-            foreach(var seg in mesh.Segments)
+            foreach (var seg in mesh.Segments)
             {
                 var p1 = new Point(seg.GetVertex(0));
                 var p2 = new Point(seg.GetVertex(1));
@@ -56,6 +56,8 @@ namespace AdventureLandLibrary.Pathfinding
                     pointMapping.Add(centroid, id);
                 }
 
+                var cID = pointMapping[centroid];
+
                 for (var i = 0; i < 3; i++)
                 {
                     var neighbor = tri.GetNeighbor(i);
@@ -70,26 +72,31 @@ namespace AdventureLandLibrary.Pathfinding
                             pointMapping.Add(neighborCentroid, id);
                         }
 
-                        var iID = pointMapping[centroid];
-                        var xID = pointMapping[neighborCentroid];
+
+                        var nID = pointMapping[neighborCentroid];
 
                         var dist = centroid.Distance(neighborCentroid);
 
-                        graph.Connect(iID, xID, (int)Math.Ceiling(dist), "");
+                        graph.Connect(cID, nID, (int)Math.Ceiling(dist), "");
                     }
 
                     for (var x = 0; x < 3; x++)
                     {
+                        var iPoint = new PointStruct(tri.GetVertex(i));
+                        if (!pointMapping.ContainsKey(iPoint))
+                        {
+                            var id = graph.AddNode(new Point(iPoint.X, iPoint.Y));
+                            pointMapping.Add(iPoint, id);
+                        }
+                        var iID = pointMapping[iPoint];
+                        var cdist = iPoint.Distance(centroid);
+                        graph.Connect(cID, iID, (int)cdist, "");
+                        graph.Connect(iID, cID, (int)cdist, "");
                         if (i != x)
                         {
-                            var iPoint = new PointStruct(tri.GetVertex(i));
                             var xPoint = new PointStruct(tri.GetVertex(x));
 
-                            if (!pointMapping.ContainsKey(iPoint))
-                            {
-                                var id = graph.AddNode(new Point(iPoint.X, iPoint.Y));
-                                pointMapping.Add(iPoint, id);
-                            }
+
 
                             if (!pointMapping.ContainsKey(xPoint))
                             {
@@ -97,16 +104,15 @@ namespace AdventureLandLibrary.Pathfinding
                                 pointMapping.Add(xPoint, id);
                             }
 
-                            var iID = pointMapping[iPoint];
+
                             var xID = pointMapping[xPoint];
-                            var cID = pointMapping[centroid];
 
                             var dist = iPoint.Distance(xPoint);
 
-                            var cdist = iPoint.Distance(centroid);
+
 
                             graph.Connect(iID, xID, (int)Math.Ceiling(dist), "");
-                            graph.Connect(cID, iID, (int)cdist, "");
+
                         }
                     }
                 }
@@ -197,22 +203,39 @@ namespace AdventureLandLibrary.Pathfinding
             }
         }
 
-        private uint GetNearestNode(PointStruct point)
+        private uint? GetNearestNode(PointStruct point)
         {
             PointStruct? closestPoint = null;
             double closestDistance = 0;
 
-            foreach (var key in pointMapping.Keys)
+            var sortedKeys = pointMapping.Keys.OrderBy(e => e.Distance(point));
+
+            foreach (var key in sortedKeys)
             {
-                var dist = key.Distance(point);
-                if (closestPoint == null || dist < closestDistance)
+
+                var crossesEdge = LineCrossesEdge(new Line(new Point(point.X, point.Y), new Point(key.X, key.Y)));
+                if (!crossesEdge)
                 {
-                    closestPoint = key;
-                    closestDistance = dist;
+                    return pointMapping[key];
                 }
             }
 
-            return pointMapping[closestPoint.Value];
+            return null;
+        }
+
+        private bool LineCrossesEdge(Line line)
+        {
+            var crosses = false;
+
+            foreach (var edge in edges)
+            {
+                if (edge.Intersects(line))
+                {
+                    crosses = true;
+                }
+            }
+
+            return crosses;
         }
 
         public Point[] GetPath(Point from, Point to)
@@ -220,24 +243,31 @@ namespace AdventureLandLibrary.Pathfinding
             var nodeFrom = GetNearestNode(new PointStruct(from.X + xOffset, from.Y + yOffset));
             var nodeTo = GetNearestNode(new PointStruct(to.X + xOffset, to.Y + yOffset));
 
-            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-
-            timer.Start();
-            var shortestPath = graph.Dijkstra(nodeFrom, nodeTo);
-            timer.Stop();
-
-            var path = shortestPath.GetPath();
-            List<Point> pathPoints = new List<Point>();
-            pathPoints.Add(from);
-            foreach (uint node in path)
+            if (nodeFrom != null && nodeTo != null)
             {
-                var point = graph[node].Item;
+                System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
 
-                pathPoints.Add(new Point(point.X - xOffset, point.Y - yOffset));
+                timer.Start();
+                var shortestPath = graph.Dijkstra(nodeFrom.Value, nodeTo.Value);
+                timer.Stop();
+
+                var path = shortestPath.GetPath();
+                List<Point> pathPoints = new List<Point>();
+                pathPoints.Add(from);
+                foreach (uint node in path)
+                {
+                    var point = graph[node].Item;
+
+                    pathPoints.Add(new Point(point.X - xOffset, point.Y - yOffset));
+                }
+                pathPoints.Add(to);
+
+                return pathPoints.ToArray();
             }
-            pathPoints.Add(to);
-
-            return pathPoints.ToArray();
+            else
+            {
+                return new Point[0];
+            }
         }
     }
 }

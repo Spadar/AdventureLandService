@@ -72,7 +72,7 @@ namespace AdventureLandLibrary.GameObjects
 
                 foreach (var line in lines)
                 {
-                    PointMap.DrawWall(line, 9, 6);
+                    PointMap.DrawWall(line, 10, 8);
                 }
 
                 var spawns = ((JObject)(Loader.data.maps))[MapID]["spawns"];
@@ -96,10 +96,10 @@ namespace AdventureLandLibrary.GameObjects
                     var p3 = new Point(MaxX, MaxY);
                     var p4 = new Point(MaxX, MinY);
 
-                    PointMap.DrawWall(new Line(p1, p2), 9, 6);
-                    PointMap.DrawWall(new Line(p2, p3), 9, 6);
-                    PointMap.DrawWall(new Line(p3, p4), 9, 6);
-                    PointMap.DrawWall(new Line(p4, p1), 9, 6);
+                    PointMap.DrawWall(new Line(p1, p2), 10, 8);
+                    PointMap.DrawWall(new Line(p2, p3), 10, 8);
+                    PointMap.DrawWall(new Line(p3, p4), 10, 8);
+                    PointMap.DrawWall(new Line(p4, p1), 10, 8);
                 //}
 
                 Mesh = PointMap.BuildMesh();
@@ -109,20 +109,6 @@ namespace AdventureLandLibrary.GameObjects
 
                 graph = new MapGraph(Mesh, OffsetX, OffsetY);
 
-                System.Diagnostics.Stopwatch test = new System.Diagnostics.Stopwatch();
-                test.Start();
-
-                //TestMain
-                //var pathPoints = graph.GetPath(new Point(0, 0), new Point(785, -637));
-                //Test Level1
-                //var pathPoints = graph.GetPath(new Point(0, 9), new Point(-863, 89));
-
-                var pathPoints = graph.GetPath(new Point(1536, -161), new Point(1032, -1802));
-
-                var smooth = SmoothPath(pathPoints);
-
-                test.Stop();
-                SaveBitmap(Mesh);
             }
             else
             {

@@ -6,11 +6,8 @@ namespace AdventureLandLibrary.Geometry
 {
     public class Point
     {
-        public int X;
-        public int Y;
-
-        public int erodeX;
-        public int erodeY;
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Point(int x, int y)
         {
