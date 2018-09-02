@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using AdventureLandLibrary.Geometry;
 using AdventureLandLibrary.Global;
 using AdventureLandLibrary.Pathfinding;
@@ -24,7 +25,9 @@ namespace AdventureLandLibrary.GameObjects
 
         public PointMap PointMap;
 
-        private TriangleNet.Mesh Mesh;
+        public TriangleNet.Mesh Mesh;
+
+        public Line[] edges;
 
         private MapGraph graph;
 
@@ -72,7 +75,7 @@ namespace AdventureLandLibrary.GameObjects
 
                 foreach (var line in lines)
                 {
-                    PointMap.DrawWall(line, 10, 8);
+                    PointMap.DrawWall(line, 9, 9, 4, 8);
                 }
 
                 var spawns = ((JObject)(Loader.data.maps))[MapID]["spawns"];
@@ -96,18 +99,21 @@ namespace AdventureLandLibrary.GameObjects
                     var p3 = new Point(MaxX, MaxY);
                     var p4 = new Point(MaxX, MinY);
 
-                    PointMap.DrawWall(new Line(p1, p2), 10, 8);
-                    PointMap.DrawWall(new Line(p2, p3), 10, 8);
-                    PointMap.DrawWall(new Line(p3, p4), 10, 8);
-                    PointMap.DrawWall(new Line(p4, p1), 10, 8);
+                    PointMap.DrawWall(new Line(p1, p2), 9, 9, 4, 8);
+                    PointMap.DrawWall(new Line(p2, p3), 9, 9, 4, 8);
+                    PointMap.DrawWall(new Line(p3, p4), 9, 9, 4, 8);
+                    PointMap.DrawWall(new Line(p4, p1), 9, 9, 4, 8);
                 //}
 
                 Mesh = PointMap.BuildMesh();
 
+                this.edges = PointMap.GetEdges();
+
+                
                 PointMap.FillMeshEdges(Mesh);
 
 
-                graph = new MapGraph(Mesh, OffsetX, OffsetY);
+                graph = new MapGraph(Mesh, PointMap, OffsetX, OffsetY);
 
             }
             else
@@ -119,6 +125,11 @@ namespace AdventureLandLibrary.GameObjects
         public Point[] FindPath(Point start, Point end)
         {
             return graph.GetPath(start, end);
+        }
+
+        public GraphNode[] FindPathDebug(Point start, Point end)
+        {
+            return graph.GetPathDebug(start, end);
         }
 
         public Point[] SmoothPath(Point[] path)
@@ -152,6 +163,115 @@ namespace AdventureLandLibrary.GameObjects
             return smoothedPath.ToArray();
 
         }
+
+        public Point[] SmoothPathReverse(Point[] path)
+        {
+            List<Point> smoothedPath = new List<Point>();
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                var startPoint = path[i];
+                smoothedPath.Add(startPoint);
+
+                for (int x = path.Length - 1; x > i; x--)
+                {
+                    if (x > path.Length - 1)
+                    {
+                        x = path.Length - 1;
+
+                        if(x <= i)
+                        {
+                            break;
+                        }
+                    }
+                    var skippedPoint = path[x];
+
+                    var line = new Line(startPoint, skippedPoint);
+
+                    if (PointMap.IsInterior(line))
+                    {
+                        i = x - 1;
+                        break;
+                    }
+
+                }
+            }
+
+            return smoothedPath.ToArray();
+
+        }
+
+        public Point[] SmoothPathDetailed(Point[] path)
+        {
+            List<Point> smoothedPath = new List<Point>();
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                var startPoint = path[i];
+                smoothedPath.Add(startPoint);
+
+                if (i < path.Length - 2)
+                {
+                    var prevLine = new Line(path[i], path[i + 1]);
+                    var nextLine = new Line(path[i + 1], path[i + 2]);
+
+                    var prevIndex = prevLine.Points.Length - 1;
+                    var nextIndex = 0;
+
+                    var decrementPrev = true;
+                    var incrementNext = true;
+
+                    Line curLine = null;
+
+                    while(decrementPrev && incrementNext)
+                    {
+                        if(prevIndex == 0)
+                        {
+                            decrementPrev = false;
+                        }
+
+                        if(nextIndex == nextLine.Points.Length - 1)
+                        {
+                            incrementNext = false;
+                        }
+
+                        var testLine = new Line(prevLine.Points[prevIndex], nextLine.Points[nextIndex]);
+
+                        if(PointMap.IsInterior(testLine))
+                        {
+                            if(curLine == null || testLine.Points.Length > curLine.Points.Length)
+                            {
+                                curLine = testLine;
+                            }
+                        }
+
+                        if (decrementPrev)
+                        {
+                            prevIndex -= 1;
+                        }
+
+                        if (incrementNext)
+                        {
+                            nextIndex += 1;
+                        }
+
+                    }
+
+                    if(curLine != null)
+                    {
+                        smoothedPath.Add(curLine.P1);
+                        smoothedPath.Add(curLine.P2);
+
+                        i = i + 2;
+                    }
+
+                }
+            }
+
+            return SmoothPath(smoothedPath.ToArray());
+
+        }
+
 
         public System.Drawing.Bitmap GetBitmap()
         {

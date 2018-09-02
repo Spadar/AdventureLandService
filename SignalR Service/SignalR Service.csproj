@@ -109,6 +109,10 @@
       <Project>{17C892FC-06FB-4CE5-A754-CFA2AEB87564}</Project>
       <Name>AdventureLandLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Triangle\Triangle.csproj">
+      <Project>{F7907A0A-B75F-400B-9E78-BFAD00DB4D6B}</Project>
+      <Name>Triangle</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

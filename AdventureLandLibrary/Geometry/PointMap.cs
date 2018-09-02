@@ -40,6 +40,24 @@ namespace AdventureLandLibrary.Geometry
             this.yOffset = yOffset;
         }
 
+        public Line[] GetEdges()
+        {
+            var polygon = BuildPolygon();
+
+            List<Line> edges = new List<Line>();
+
+            var poly = BuildPolygon();
+
+            foreach (var segment in poly.polygon.Segments)
+            {
+                var line = new Line(new Point(segment.GetVertex(0)), new Point(segment.GetVertex(1)));
+
+                edges.Add(line);
+            }
+
+            return edges.ToArray();
+        }
+
         public void RefillInterior(List<Point> interiorPoints)
         {
             int width = points.GetLength(0);
@@ -171,7 +189,7 @@ namespace AdventureLandLibrary.Geometry
             var constraintOptions = new TriangleNet.Meshing.ConstraintOptions();
 
             var qualityOptions = new TriangleNet.Meshing.QualityOptions();
-            qualityOptions.MinimumAngle = 20;
+            qualityOptions.MinimumAngle = 25;
             qualityOptions.MaximumAngle = 180;
 
 
@@ -534,6 +552,32 @@ namespace AdventureLandLibrary.Geometry
             
         }
 
+        public void DrawWall(Line line, int xBufferMin, int xBufferMax, int yBufferMin, int yBufferMax)
+        {
+            foreach (var point in line.Points)
+            {
+                var offsetPoint = new Point(point.X + xOffset, point.Y + yOffset);
+                if (isOffsetPointWithinBounds(offsetPoint))
+                {
+                    points[offsetPoint.X, offsetPoint.Y] = PointType.Wall;
+                }
+            }
+            var rect = new Rect(line, xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+            foreach (var point in rect.Points)
+            {
+                var offsetPoint = new Point(point.X + xOffset, point.Y + yOffset);
+                if (isOffsetPointWithinBounds(offsetPoint))
+                {
+                    if (points[offsetPoint.X, offsetPoint.Y] != PointType.Wall)
+                    {
+                        points[offsetPoint.X, offsetPoint.Y] = PointType.Eroded;
+                    }
+                }
+            }
+
+
+        }
+
         /// <summary>
         /// Is a point that has already been offset to match the array coordinate system within the bounds of the array?
         /// </summary>
@@ -607,6 +651,38 @@ namespace AdventureLandLibrary.Geometry
             return neighbors;
         }
 
+        public bool IsOffsetInsideMap(Point point)
+        {
+            if(isOffsetPointWithinBounds(point))
+            {
+                return points[point.X, point.Y] == PointType.Interior;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsOffsetInterior(Line line)
+        {
+            foreach (var point in line.Points)
+            {
+                if (isOffsetPointWithinBounds(point))
+                {
+                    if (points[point.X, point.Y] != PointType.Interior)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public bool IsInterior(Line line)
         {
             foreach (var point in line.Points)
@@ -666,7 +742,7 @@ namespace AdventureLandLibrary.Geometry
 
             //var verts = IdentifyVertices();
 
-            //foreach(var vert in verts)
+            //foreach (var vert in verts)
             //{
             //    lockbitmap.SetPixel(vert.X, vert.Y, System.Drawing.Color.Red);
             //}
@@ -686,7 +762,7 @@ namespace AdventureLandLibrary.Geometry
                         var ncentroid = new Point(((TriangleNet.Topology.Triangle)neighbor).GetCentroid());
 
                         var centroidLine = new Line(centroid, ncentroid);
-                        meshLines.Add(centroidLine);
+                        //meshLines.Add(centroidLine);
                     }
                 }
 
@@ -706,9 +782,9 @@ namespace AdventureLandLibrary.Geometry
                 meshLines.Add(edge2);
                 meshLines.Add(edge3);
 
-                meshLines.Add(c1);
-                meshLines.Add(c2);
-                meshLines.Add(c3);
+                //meshLines.Add(c1);
+                //meshLines.Add(c2);
+                //meshLines.Add(c3);
             }
 
 

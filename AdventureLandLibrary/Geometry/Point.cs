@@ -27,6 +27,30 @@ namespace AdventureLandLibrary.Geometry
             this.Y = (int)vertex.Y;
         }
 
+        public Point(TriangleNet.Geometry.Point point, int xOffset, int yOffset)
+        {
+            this.X = (int)point.X - xOffset;
+            this.Y = (int)point.Y - yOffset;
+        }
+
+        public Point(TriangleNet.Geometry.Vertex vertex, int xOffset, int yOffset)
+        {
+            this.X = (int)vertex.X - xOffset;
+            this.Y = (int)vertex.Y - yOffset;
+        }
+
+        public Point(PointStruct point)
+        {
+            this.X = point.X;
+            this.Y = point.Y;
+        }
+
+        public Point(PointD point)
+        {
+            this.X = (int)point.X;
+            this.Y = (int)point.Y;
+        }
+
         public double Angle(Point p2)
         {
             float xDiff = p2.X - X;

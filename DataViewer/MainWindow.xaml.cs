@@ -33,7 +33,9 @@ namespace DataViewer
         double yOffset;
         ImageBrush background;
 
-        List<Line> currentPath = new List<Line>();
+        List<Shape> currentPath = new List<Shape>();
+        List<Line> currentPathSmoothed = new List<Line>();
+        List<Line> currentPathDetailed = new List<Line>();
 
         AdventureLandLibrary.Geometry.Point PathEndPoint;
 
@@ -45,6 +47,8 @@ namespace DataViewer
             maps = ((JObject)Loader.data.geometry).Properties().Select(p => p.Name).ToList();
 
             MapSelect.ItemsSource = maps;
+
+            MapSelect.SelectedIndex = 11;
         }
 
         private void MapSelect_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -223,41 +227,306 @@ namespace DataViewer
                     Canvas.Children.Remove(line);
                 }
 
-                currentPath = new List<Line>();
+                foreach (var line in currentPathSmoothed)
+                {
+                    Canvas.Children.Remove(line);
+                }
+
+                foreach (var line in currentPathDetailed)
+                {
+                    Canvas.Children.Remove(line);
+                }
+
+                currentPath = new List<Shape>();
 
                 var pathStartPoint = GetMouseMapPoint();
                 System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+                
+                //var path = currentMap.FindPath(pathStartPoint, PathEndPoint);
+                var nodes = currentMap.FindPathDebug(pathStartPoint, PathEndPoint);
                 timer.Start();
-                var path = currentMap.FindPath(pathStartPoint, PathEndPoint);
-
-                if (chkSmooth.IsChecked.HasValue && chkSmooth.IsChecked.Value)
-                {
-                    var smoothedpath = currentMap.SmoothPath(path);
-                    path = smoothedpath;
-                }
+                var funneled = TunnelSmooth(nodes.ToList());
                 timer.Stop();
                 PathTime.Content = timer.ElapsedMilliseconds;
 
-                for (var i = 0; i < path.Length - 1; i++)
+                for (var i = 0; i < funneled.Count - 1; i++)
                 {
-                    var p1 = path[i];
-                    var p2 = path[i + 1];
+                    var p1 = funneled[i];
+                    var p2 = funneled[i + 1];
+                    var line2 = new Line();
+                    line2.X1 = p1.X - xOffset + currentMap.OffsetX;
+                    line2.X2 = p2.X - xOffset + currentMap.OffsetX;
+                    line2.Y1 = p1.Y - yOffset + currentMap.OffsetY;
+                    line2.Y2 = p2.Y - yOffset + currentMap.OffsetY;
 
-                    var line = new Line();
-                    line.X1 = p1.X + currentMap.OffsetX - xOffset;
-                    line.X2 = p2.X + currentMap.OffsetX - xOffset;
-                    line.Y1 = p1.Y + currentMap.OffsetY - yOffset;
-                    line.Y2 = p2.Y + currentMap.OffsetY - yOffset;
 
-                    line.StrokeThickness = 2;
-                    line.Stroke = Brushes.Blue;
+                    line2.StrokeThickness = 2;
+                    line2.Stroke = Brushes.Blue;
 
-                    line.MouseRightButtonDown += Window_MouseRightButtonDown;
+                    line2.MouseRightButtonDown += Window_MouseRightButtonDown;
 
-                    currentPath.Add(line);
-                    Canvas.Children.Add(line);
+                    currentPath.Add(line2);
+                    Canvas.Children.Add(line2);
                 }
 
+                for (var i = 0; i < nodes.Length - 2; i++)
+                {
+                    var portal = nodes[i].GetPortal(nodes[i + 1]);
+
+                    if (portal != null)
+                    {
+                        var line = new Line();
+                        line.X1 = portal.P1.X - xOffset;
+                        line.X2 = portal.P2.X - xOffset;
+                        line.Y1 = portal.P1.Y - yOffset;
+                        line.Y2 = portal.P2.Y - yOffset;
+                    
+
+                        line.StrokeThickness = 2;
+                        line.Stroke = Brushes.Green;
+
+                        line.MouseRightButtonDown += Window_MouseRightButtonDown;
+
+                        currentPath.Add(line);
+                        Canvas.Children.Add(line);
+
+                        var right = new System.Windows.Shapes.Path();
+
+                        right.StrokeThickness = 2;
+                        right.Stroke = Brushes.Purple;
+
+                        var rightEll = new EllipseGeometry();
+
+                        rightEll.Center = new Point(portal.P1.X - xOffset, portal.P1.Y - yOffset);
+                        rightEll.RadiusX = 5;
+                        rightEll.RadiusY = 5;
+
+                        right.Data = rightEll;
+
+                        currentPath.Add(right);
+                        Canvas.Children.Add(right);
+
+                        var left = new System.Windows.Shapes.Path();
+
+                        left.StrokeThickness = 2;
+                        left.Stroke = Brushes.Cyan;
+
+                        var leftEll = new EllipseGeometry();
+
+                        leftEll.Center = new Point(portal.P2.X - xOffset, portal.P2.Y - yOffset);
+                        leftEll.RadiusX = 5;
+                        leftEll.RadiusY = 5;
+
+                        left.Data = leftEll;
+
+                        currentPath.Add(left);
+                        Canvas.Children.Add(left);
+
+                    }
+                    else
+                    {
+                        var test = true;
+                    }
+                }
+
+                //for (var i = 0; i < detailedPath.Length - 1; i++)
+                //{
+                //    var p1 = detailedPath[i];
+                //    var p2 = detailedPath[i + 1];
+
+                //    var line = new Line();
+                //    line.X1 = p1.X + currentMap.OffsetX - xOffset;
+                //    line.X2 = p2.X + currentMap.OffsetX - xOffset;
+                //    line.Y1 = p1.Y + currentMap.OffsetY - yOffset;
+                //    line.Y2 = p2.Y + currentMap.OffsetY - yOffset;
+
+                //    line.StrokeThickness = 2;
+                //    line.Stroke = Brushes.Green;
+
+                //    line.MouseRightButtonDown += Window_MouseRightButtonDown;
+
+                //    currentPathDetailed.Add(line);
+                //    Canvas.Children.Add(line);
+                //}
+
+                //for (var i = 0; i < smoothedPath.Length - 1; i++)
+                //{
+                //    var p1 = smoothedPath[i];
+                //    var p2 = smoothedPath[i + 1];
+
+                //    var line = new Line();
+                //    line.X1 = p1.X + currentMap.OffsetX - xOffset;
+                //    line.X2 = p2.X + currentMap.OffsetX - xOffset;
+                //    line.Y1 = p1.Y + currentMap.OffsetY - yOffset;
+                //    line.Y2 = p2.Y + currentMap.OffsetY - yOffset;
+
+                //    line.StrokeThickness = 2;
+                //    line.Stroke = Brushes.Yellow;
+
+                //    line.MouseRightButtonDown += Window_MouseRightButtonDown;
+
+                //    currentPathSmoothed.Add(line);
+                //    Canvas.Children.Add(line);
+                //}
+
+                //for (var i = 0; i < path.Length - 1; i++)
+                //{
+                //    var p1 = path[i];
+                //    var p2 = path[i + 1];
+
+                //    var line = new Line();
+                //    line.X1 = p1.X + currentMap.OffsetX - xOffset;
+                //    line.X2 = p2.X + currentMap.OffsetX - xOffset;
+                //    line.Y1 = p1.Y + currentMap.OffsetY - yOffset;
+                //    line.Y2 = p2.Y + currentMap.OffsetY - yOffset;
+
+                //    line.StrokeThickness = 2;
+                //    line.Stroke = Brushes.Blue;
+
+                //    line.MouseRightButtonDown += Window_MouseRightButtonDown;
+
+                //    currentPath.Add(line);
+                //    Canvas.Children.Add(line);
+                //}
+
+            }
+        }
+
+        public List<AdventureLandLibrary.Geometry.Point> TunnelSmooth(List<AdventureLandLibrary.Geometry.GraphNode> path)
+        {
+            if (path.Count > 2)
+            {
+                List<AdventureLandLibrary.Geometry.Point> newPath = new List<AdventureLandLibrary.Geometry.Point>();
+
+                List<AdventureLandLibrary.Geometry.LineD> portals = new List<AdventureLandLibrary.Geometry.LineD>();
+
+                for (var i = 0; i < path.Count - 2; i++)
+                {
+                    portals.Add(path[i].GetPortal(path[i + 1]));
+                }
+
+                AdventureLandLibrary.Geometry.PointD currentNode = new AdventureLandLibrary.Geometry.PointD(path[0].center.X, path[0].center.Y);
+
+                newPath.Add(new AdventureLandLibrary.Geometry.Point((int)currentNode.X - currentMap.OffsetX, (int)currentNode.Y - currentMap.OffsetY));
+
+                int funnelLeftIndex = 1;
+                int funnelRightIndex = 1;
+                //int leftLastInside = 0;
+                //int rightLastInside = 0;
+
+                int currentPortal = 0;
+
+                AdventureLandLibrary.Geometry.LineD funnelLeft = new AdventureLandLibrary.Geometry.LineD(currentNode, portals[0].P2);
+                AdventureLandLibrary.Geometry.LineD funnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, portals[0].P1);
+
+                int count = 0;
+                while (funnelLeftIndex < portals.Count && funnelRightIndex < portals.Count && count < 100)
+                {
+                    var leftPortal = portals[funnelLeftIndex];
+                    var rightPortal = portals[funnelRightIndex];
+
+                    var insideFunnel = false;
+
+                    //var dirLeftLeft = funnelLeft.Direction(leftPortal.P2);
+                    //var dirRightRight = funnelRight.Direction(rightPortal.P1);
+                    var leftIsRightOfLeft = funnelLeft.Direction(leftPortal.P2) <= 0;
+                    var rightIsLeftOfRight = funnelRight.Direction(rightPortal.P1) >= 0;
+
+                    //var dirLeftRight = funnelRight.Direction(leftPortal.P2);
+                    //var dirRightLeft = funnelLeft.Direction(rightPortal.P1);
+                    var leftIsLeftOfRight = funnelRight.Direction(leftPortal.P2) >= 0;
+                    var rightIsRightOfLeft = funnelLeft.Direction(rightPortal.P1) <= 0;
+
+                    if (leftIsRightOfLeft && rightIsLeftOfRight && leftIsLeftOfRight && rightIsRightOfLeft)
+                    {
+                        insideFunnel = true;
+                    }
+
+                    if (!insideFunnel)
+                    {
+                        if (leftIsLeftOfRight && leftIsRightOfLeft)
+                        {
+                            //leftLastInside = funnelLeftIndex;
+                            funnelLeftIndex += 1;
+                            funnelLeft = new AdventureLandLibrary.Geometry.LineD(currentNode, leftPortal.P2);
+
+                        }
+                        else if(leftIsLeftOfRight)
+                        {
+                            funnelLeftIndex += 1;
+                            //funnelLeft = new AdventureLandLibrary.Geometry.LineD(currentNode, leftPortal.P2);
+                        }
+
+                        if (rightIsLeftOfRight && rightIsRightOfLeft)
+                        {
+                            //rightLastInside = funnelRightIndex;
+                            funnelRightIndex += 1;
+                            funnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, rightPortal.P1);
+                        }
+                        else if(rightIsRightOfLeft)
+                        {
+                            funnelRightIndex += 1;
+                            //funnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, rightPortal.P1);
+                        }
+
+                        if(!rightIsRightOfLeft)
+                        {
+                            newPath.Add(new AdventureLandLibrary.Geometry.Point((int)funnelLeft.P2.X - currentMap.OffsetX, (int)funnelLeft.P2.Y - currentMap.OffsetY));
+                            currentNode = funnelLeft.P2;
+
+                            var minFunnelIndex = Math.Min(funnelLeftIndex, funnelRightIndex);
+
+                            funnelLeft = new AdventureLandLibrary.Geometry.LineD(currentNode, portals[minFunnelIndex].P2);
+                            funnelLeftIndex = minFunnelIndex + 1;
+                            //leftLastInside = funnelLeftIndex;
+                            funnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, portals[minFunnelIndex].P1);
+                            funnelRightIndex = minFunnelIndex + 1;
+                            //rightLastInside = funnelRightIndex;
+                        }
+
+                        if(!leftIsLeftOfRight)
+                        {
+                            newPath.Add(new AdventureLandLibrary.Geometry.Point((int)funnelRight.P2.X - currentMap.OffsetX, (int)funnelRight.P2.Y - currentMap.OffsetY));
+                            currentNode = funnelRight.P2;
+
+                            var minFunnelIndex = Math.Min(funnelLeftIndex, funnelRightIndex);
+
+                            funnelLeft = new AdventureLandLibrary.Geometry.LineD(currentNode, portals[minFunnelIndex].P2);
+                            funnelLeftIndex = minFunnelIndex + 1;
+                            //leftLastInside = funnelLeftIndex;
+                            funnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, portals[minFunnelIndex].P1);
+                            funnelRightIndex = minFunnelIndex + 1;
+                            //rightLastInside = funnelRightIndex;
+                        }
+
+                    }
+                    else
+                    {
+                        //rightLastInside = funnelRightIndex;
+                        //leftLastInside = funnelLeftIndex;
+                        funnelLeftIndex += 1;
+                        funnelRightIndex += 1;
+
+                        funnelLeft = new AdventureLandLibrary.Geometry.LineD(currentNode, leftPortal.P2);
+
+                        funnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, rightPortal.P1);
+                    }
+                    //count++;
+                }
+
+                newPath.Add(new AdventureLandLibrary.Geometry.Point(path.Last().center.X - currentMap.OffsetX, path.Last().center.Y - currentMap.OffsetY));
+                return newPath;
+            }
+            else
+            {
+                List<AdventureLandLibrary.Geometry.Point> newPath = new List<AdventureLandLibrary.Geometry.Point>();
+
+                foreach (var node in path)
+                {
+                    newPath.Add(new AdventureLandLibrary.Geometry.Point(node.center));
+                }
+
+                return newPath;
             }
         }
 

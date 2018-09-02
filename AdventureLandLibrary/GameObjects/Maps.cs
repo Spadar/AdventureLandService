@@ -4,7 +4,15 @@ using System.Text;
 
 namespace AdventureLandLibrary.GameObjects
 {
-    public class Maps
+    public static class Maps
     {
+        public static Dictionary<string, Map> MapDictionary;
+
+        static Maps()
+        {
+            MapDictionary = new Dictionary<string, Map>();
+
+
+        }
     }
 }

@@ -63,5 +63,30 @@ namespace AdventureLandLibrary.Geometry
                 maxY = line.P1.Y + offsetY;
             }
         }
+
+        public Rect(Line line, int offsetMinX, int offsetMaxX, int offsetMinY, int offsetMaxY)
+        {
+            if (line.P1.X < line.P2.X)
+            {
+                minX = line.P1.X - offsetMinX;
+                maxX = line.P2.X + offsetMaxX;
+            }
+            else
+            {
+                minX = line.P2.X - offsetMinX;
+                maxX = line.P1.X + offsetMaxX;
+            }
+
+            if (line.P1.Y < line.P2.Y)
+            {
+                minY = line.P1.Y - offsetMinY;
+                maxY = line.P2.Y + offsetMaxY;
+            }
+            else
+            {
+                minY = line.P2.Y - offsetMinY;
+                maxY = line.P1.Y + offsetMaxY;
+            }
+        }
     }
 }

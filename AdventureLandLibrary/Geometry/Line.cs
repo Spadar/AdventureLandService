@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace AdventureLandLibrary.Geometry
 {
@@ -8,6 +10,7 @@ namespace AdventureLandLibrary.Geometry
     {
         private Point[] _points;
 
+        [JsonIgnore]
         public Point[] Points
         {
             get
@@ -55,12 +58,55 @@ namespace AdventureLandLibrary.Geometry
             this.P2 = p2;
         }
 
+        public Point FindClosestPoint(Point pt)
+        {
+            Point closest = null;
+            float dx = P2.X - P1.X;
+            float dy = P2.Y - P1.Y;
+            if ((dx == 0) && (dy == 0))
+            {
+                // It's a point not a line segment.
+                closest = new Point(P1.X, P1.Y);
+                return closest;
+            }
+
+            // Calculate the t that minimizes the distance.
+            float t = ((pt.X - P1.X) * dx + (pt.Y - P1.Y) * dy) /
+                (dx * dx + dy * dy);
+
+            // See if this represents one of the segment's
+            // end points or a point in the middle.
+            if (t < 0)
+            {
+                closest = new Point(P1.X, P1.Y);
+                return closest;
+            }
+            else if (t > 1)
+            {
+                closest = new Point(P2.X, P2.Y);
+            }
+            else
+            {
+                closest = new Point((int)(P1.X + t * dx),(int)(P1.Y + t * dy));
+                return closest;
+            }
+
+            return closest;
+        }
+
+        public bool IsPointOnLine(Point point)
+        {
+            var pointMatch = Points.Where(p => p.X == point.X && p.Y == point.Y).ToArray();
+
+            return pointMatch.Length > 0;
+        }
+
         /// <summary>
         /// Sourced from http://silverbling.blogspot.com/2010/06/2d-line-segment-intersection-detection.html
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public bool Intersects(Line line)
+        public Point Intersection(Line line)
         {
             float firstLineSlopeX, firstLineSlopeY, secondLineSlopeX, secondLineSlopeY;
 
@@ -76,16 +122,75 @@ namespace AdventureLandLibrary.Geometry
 
             if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
             {
-                //float intersectionPointX = this.P1.X + (t * firstLineSlopeX);
-                //float intersectionPointY = this.P1.Y + (t * firstLineSlopeY);
+                float intersectionPointX = this.P1.X + (t * firstLineSlopeX);
+                float intersectionPointY = this.P1.Y + (t * firstLineSlopeY);
 
                 //// Collision detected
                 //intersectionPoint = new Vector3(intersectionPointX, intersectionPointY, 0);
-
-                return true;
+                var intersectionPoint = new Point((int)intersectionPointX, (int)intersectionPointY);
+                return intersectionPoint;
             }
 
-            return false; // No collision
+            return null; // No collision
+        }
+
+        // Given three colinear points p, q, r, the function checks if
+        // point q lies on line segment 'pr'
+        bool onSegment(Point p, Point q, Point r)
+        {
+            if (q.X <= Math.Max(p.X, r.X) && q.X >= Math.Min(p.X, r.X) &&
+                q.Y <= Math.Max(p.Y, r.Y) && q.Y >= Math.Min(p.Y, r.Y))
+                return true;
+
+            return false;
+        }
+
+        // To find orientation of ordered triplet (p, q, r).
+        // The function returns following values
+        // 0 --> p, q and r are colinear
+        // 1 --> Clockwise
+        // 2 --> Counterclockwise
+        int orientation(Point p, Point q, Point r)
+        {
+            // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
+            // for details of below formula.
+            int val = (q.Y - p.Y) * (r.X - q.X) -
+                      (q.X - p.X) * (r.Y - q.Y);
+
+            if (val == 0) return 0;  // colinear
+
+            return (val > 0) ? 1 : 2; // clock or counterclock wise
+        }
+
+        // The main function that returns true if line segment 'p1q1'
+        // and 'p2q2' intersect.
+        public bool doIntersect(Line line)
+        {
+            // Find the four orientations needed for general and
+            // special cases
+            int o1 = orientation(P1, P2, line.P1);
+            int o2 = orientation(P1, P2, line.P2);
+            int o3 = orientation(line.P1, line.P2, P1);
+            int o4 = orientation(line.P1, line.P2, P2);
+
+            // General case
+            if (o1 != o2 && o3 != o4)
+                return true;
+
+            // Special Cases
+            // p1, q1 and p2 are colinear and p2 lies on segment p1q1
+            if (o1 == 0 && onSegment(P1, line.P1, P2)) return true;
+
+            // p1, q1 and q2 are colinear and q2 lies on segment p1q1
+            if (o2 == 0 && onSegment(P1, line.P2, P2)) return true;
+
+            // p2, q2 and p1 are colinear and p1 lies on segment p2q2
+            if (o3 == 0 && onSegment(line.P1, P1, line.P2)) return true;
+
+            // p2, q2 and q1 are colinear and q1 lies on segment p2q2
+            if (o4 == 0 && onSegment(line.P1, P2, line.P2)) return true;
+
+            return false; // Doesn't fall in any of the above cases
         }
 
         private void GetPoints()

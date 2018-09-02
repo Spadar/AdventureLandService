@@ -53,14 +53,16 @@
     <Compile Include="Enumerations\PointType.cs" />
     <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameObjects\Maps.cs" />
+    <Compile Include="Geometry\GraphNode.cs" />
     <Compile Include="Geometry\Line.cs" />
+    <Compile Include="Geometry\LineD.cs" />
     <Compile Include="Geometry\Point.cs" />
+    <Compile Include="Geometry\PointD.cs" />
     <Compile Include="Geometry\PointMap.cs" />
     <Compile Include="Geometry\PointStruct.cs" />
     <Compile Include="Geometry\Polygon.cs" />
     <Compile Include="Geometry\PolygonPart.cs" />
     <Compile Include="Geometry\Rect.cs" />
-    <Compile Include="Geometry\Triangle.cs" />
     <Compile Include="Global\Loader.cs" />
     <Compile Include="ImageManipulation\LockBitmap.cs" />
     <Compile Include="Pathfinding\MapGraph.cs" />

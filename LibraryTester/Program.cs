@@ -12,10 +12,10 @@ namespace LibraryTester
     {
         static void Main(string[] args)
         {
-            var line1 = new Line(new Point(-10, 0), new Point(10, 0));
-            var line2 = new Line(new Point(0, -10), new Point(0, 10));
+            //var line1 = new Line(new Point(-10, 0), new Point(10, 0));
+            //var line2 = new Line(new Point(0, -10), new Point(0, 10));
 
-            var intersect = line1.Intersects(line2);
+            //var intersect = line1.Intersects(line2);
         }
     }
 }
