@@ -187,10 +187,13 @@ namespace AdventureLandLibrary.Geometry
             var polygon = BuildPolygon();
 
             var constraintOptions = new TriangleNet.Meshing.ConstraintOptions();
+            constraintOptions.ConformingDelaunay = true;
+
 
             var qualityOptions = new TriangleNet.Meshing.QualityOptions();
             qualityOptions.MinimumAngle = 25;
             qualityOptions.MaximumAngle = 180;
+            qualityOptions.MaximumArea = 12800;
 
 
             return (TriangleNet.Mesh)TriangleNet.Geometry.ExtensionMethods.Triangulate(polygon.polygon, constraintOptions, qualityOptions);

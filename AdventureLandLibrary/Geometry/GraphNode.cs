@@ -48,6 +48,45 @@ namespace AdventureLandLibrary.Geometry
             //Not Neighbors...
             return null;
         }
+
+        public List<LineD> GetNonPortal(GraphNode neighbor, Point endPoint)
+        {
+            List<PointD> points = new List<PointD>();
+            PointD externalVertex = new PointD(endPoint.X, endPoint.Y);
+
+            for (var s = 0; s < 3; s++)
+            {
+                var v = triangle.GetVertex(s);
+
+                var matched = false;
+
+                for (var ns = 0; ns < 3; ns++)
+                {
+                    var nv = neighbor.triangle.GetVertex(ns);
+
+                    if (v.X == nv.X && v.Y == nv.Y)
+                    {
+                        points.Add(new PointD(v.X, v.Y));
+                        matched = true;
+                    }
+                }
+            }
+
+            //Order points by right to left of the line from centroid to centroid.
+            points = points.OrderBy(t => Math.Sign((neighbor.center.X - center.X) * (t.Y - center.Y) - (neighbor.center.Y - center.Y) * (t.X - center.X))).ToList();
+
+            if (points.Count == 2)
+            {
+                var line1 = new LineD(externalVertex, points[0]);
+                var line2 = new LineD(points[1], externalVertex);
+
+                return new List<LineD>() { line1, line2 };
+            }
+            else
+            {
+                return new List<LineD>();
+            }
+        }
         
     }
 }

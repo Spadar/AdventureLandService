@@ -426,7 +426,7 @@ namespace AdventureLandLibrary.Pathfinding
 
                     pathNodes.Add(tri);
                 }
-                pathNodes.Add(triGraph[nodeTo.Value].Item);
+                //pathNodes.Add(triGraph[nodeTo.Value].Item);
 
                 var test = TunnelSmooth(pathNodes);
 
