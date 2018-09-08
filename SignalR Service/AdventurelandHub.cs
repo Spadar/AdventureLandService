@@ -83,6 +83,8 @@ namespace SignalR_Service
         {
             try
             {
+                System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+                timer.Start();
                 object parsed = JsonConvert.DeserializeObject(args);
 
                 dynamic obj = JObject.FromObject(parsed);
@@ -104,6 +106,8 @@ namespace SignalR_Service
                 var smoothed = map.SmoothPath(path);
 
                 Clients.Caller.PathFound(smoothed);
+                timer.Stop();
+                Console.WriteLine("Path found in {0} ms", timer.ElapsedMilliseconds);
             }
             catch(Exception ex)
             {

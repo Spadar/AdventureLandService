@@ -242,124 +242,156 @@ namespace DataViewer
                 currentPath = new List<Shape>();
 
                 var pathStartPoint = GetMouseMapPoint();
-
-                //var path = currentMap.FindPath(pathStartPoint, PathEndPoint);
-                var nodes = currentMap.FindPathDebug(pathStartPoint, PathEndPoint);
-
-                //var start = new System.Windows.Shapes.Path();
-
-                //start.StrokeThickness = 2;
-                //start.Stroke = Brushes.Green;
-
-                //var startEll = new EllipseGeometry();
-
-                //startEll.Center = new Point(nodes[0].center.X - xOffset, nodes[0].center.Y - yOffset);
-                //startEll.RadiusX = 5;
-                //startEll.RadiusY = 5;
-
-                //start.Data = startEll;
-
-                //currentPath.Add(start);
-                //Canvas.Children.Add(start);
-
-                //var end = new System.Windows.Shapes.Path();
-
-                //end.StrokeThickness = 2;
-                //end.Stroke = Brushes.Purple;
-
-                //var endEll = new EllipseGeometry();
-
-                //endEll.Center = new Point(nodes.Last().center.X - xOffset, nodes.Last().center.Y - yOffset);
-                //endEll.RadiusX = 5;
-                //endEll.RadiusY = 5;
-
-                //end.Data = endEll;
-
-                //currentPath.Add(end);
-                //Canvas.Children.Add(end);
-
-                List<AdventureLandLibrary.Geometry.LineD> portals = new List<AdventureLandLibrary.Geometry.LineD>();
-
-                //for (var i = 0; i < nodes.Length - 1; i++)
-                //{
-                //    portals.Add(nodes[i].GetPortal(nodes[i + 1]));
-                //}
-                //if (nodes.Length > 2)
-                //{
-                //    var ending = nodes[nodes.Length - 1].GetNonPortal(nodes[nodes.Length - 2]);
-
-                //    portals.AddRange(ending);
-                //}
-
-                //for (var i = 0; i < portals.Count; i++)
-                //{
-                //    var portal = portals[i];
-
-                //    var p1Link = portals.Where(p => (p.P1.X == portal.P1.X && p.P1.Y == portal.P1.Y) || (p.P2.X == portal.P1.X && p.P2.Y == portal.P1.Y)).ToList();
-                //    var p2Link = portals.Where(p => (p.P1.X == portal.P2.X && p.P1.Y == portal.P2.Y) || (p.P2.X == portal.P2.X && p.P2.Y == portal.P2.Y)).ToList();
-
-                //    if (true)
-                //    {
-                //        var line = new Line();
-                //        line.X1 = portal.P1.X - xOffset;
-                //        line.X2 = portal.P2.X - xOffset;
-                //        line.Y1 = portal.P1.Y - yOffset;
-                //        line.Y2 = portal.P2.Y - yOffset;
-
-
-                //        line.StrokeThickness = 2;
-                //        line.Stroke = Brushes.Green;
-
-                //        line.MouseRightButtonDown += Window_MouseRightButtonDown;
-
-                //        currentPath.Add(line);
-                //        Canvas.Children.Add(line);
-
-                //        var right = new System.Windows.Shapes.Path();
-
-                //        right.StrokeThickness = 2;
-                //        right.Stroke = Brushes.Purple;
-
-                //        var rightEll = new EllipseGeometry();
-
-                //        rightEll.Center = new Point(portal.P1.X - xOffset, portal.P1.Y - yOffset);
-                //        rightEll.RadiusX = 5;
-                //        rightEll.RadiusY = 5;
-
-                //        right.Data = rightEll;
-
-                //        currentPath.Add(right);
-                //        Canvas.Children.Add(right);
-
-                //        var left = new System.Windows.Shapes.Path();
-
-                //        left.StrokeThickness = 2;
-                //        left.Stroke = Brushes.Cyan;
-
-                //        var leftEll = new EllipseGeometry();
-
-                //        leftEll.Center = new Point(portal.P2.X - xOffset, portal.P2.Y - yOffset);
-                //        leftEll.RadiusX = 5;
-                //        leftEll.RadiusY = 5;
-
-                //        left.Data = leftEll;
-
-                //        currentPath.Add(left);
-                //        Canvas.Children.Add(left);
-
-                //    }
-                //}
                 timer.Reset();
                 timer.Start();
-                var funneled = FunnelSmooth(nodes.ToList(), pathStartPoint, PathEndPoint);
-                var smoothed = currentMap.SmoothPath(funneled.ToArray());
+                //var path = currentMap.FindPath(pathStartPoint, PathEndPoint);
+                var nodes = currentMap.FindPathDebug(pathStartPoint, PathEndPoint);
+                timer.Stop();
+                if (chkFunnel.IsChecked.Value && chkDebugFunnel.IsChecked.Value)
+                {
+                    var start = new System.Windows.Shapes.Path();
+
+                    start.StrokeThickness = 2;
+                    start.Stroke = Brushes.Green;
+
+                    var startEll = new EllipseGeometry();
+
+                    startEll.Center = new Point(pathStartPoint.X + currentMap.OffsetX - xOffset, pathStartPoint.Y + currentMap.OffsetY - yOffset);
+                    startEll.RadiusX = 5;
+                    startEll.RadiusY = 5;
+
+                    start.Data = startEll;
+
+                    currentPath.Add(start);
+                    Canvas.Children.Add(start);
+
+                    var end = new System.Windows.Shapes.Path();
+
+                    end.StrokeThickness = 2;
+                    end.Stroke = Brushes.Purple;
+
+                    var endEll = new EllipseGeometry();
+
+                    endEll.Center = new Point(PathEndPoint.X + currentMap.OffsetX - xOffset, PathEndPoint.Y + currentMap.OffsetY - yOffset);
+                    endEll.RadiusX = 5;
+                    endEll.RadiusY = 5;
+
+                    end.Data = endEll;
+
+                    currentPath.Add(end);
+                    Canvas.Children.Add(end);
+
+                    List<AdventureLandLibrary.Geometry.LineD> portals = new List<AdventureLandLibrary.Geometry.LineD>();
+
+                    for (var i = 0; i < nodes.Length - 1; i++)
+                    {
+                        portals.Add(nodes[i].GetPortal(nodes[i + 1]));
+                    }
+                    if (nodes.Length > 2)
+                    {
+                        var ending = nodes[nodes.Length - 1].GetNonPortal(nodes[nodes.Length - 2], new AdventureLandLibrary.Geometry.Point(PathEndPoint.X + currentMap.OffsetX, PathEndPoint.Y + currentMap.OffsetY));
+
+                        portals.AddRange(ending);
+                    }
+
+                    for (var i = 0; i < portals.Count; i++)
+                    {
+                        var portal = portals[i];
+
+                        var p1Link = portals.Where(p => (p.P1.X == portal.P1.X && p.P1.Y == portal.P1.Y) || (p.P2.X == portal.P1.X && p.P2.Y == portal.P1.Y)).ToList();
+                        var p2Link = portals.Where(p => (p.P1.X == portal.P2.X && p.P1.Y == portal.P2.Y) || (p.P2.X == portal.P2.X && p.P2.Y == portal.P2.Y)).ToList();
+
+                        if (true)
+                        {
+                            var line = new Line();
+                            line.X1 = portal.P1.X - xOffset;
+                            line.X2 = portal.P2.X - xOffset;
+                            line.Y1 = portal.P1.Y - yOffset;
+                            line.Y2 = portal.P2.Y - yOffset;
+
+
+                            line.StrokeThickness = 2;
+                            line.Stroke = Brushes.Green;
+
+                            line.MouseRightButtonDown += Window_MouseRightButtonDown;
+
+                            currentPath.Add(line);
+                            Canvas.Children.Add(line);
+
+                            var right = new System.Windows.Shapes.Path();
+
+                            right.StrokeThickness = 2;
+                            right.Stroke = Brushes.Purple;
+
+                            var rightEll = new EllipseGeometry();
+
+                            rightEll.Center = new Point(portal.P1.X - xOffset, portal.P1.Y - yOffset);
+                            rightEll.RadiusX = 5;
+                            rightEll.RadiusY = 5;
+
+                            right.Data = rightEll;
+
+                            currentPath.Add(right);
+                            Canvas.Children.Add(right);
+
+                            var left = new System.Windows.Shapes.Path();
+
+                            left.StrokeThickness = 2;
+                            left.Stroke = Brushes.Cyan;
+
+                            var leftEll = new EllipseGeometry();
+
+                            leftEll.Center = new Point(portal.P2.X - xOffset, portal.P2.Y - yOffset);
+                            leftEll.RadiusX = 5;
+                            leftEll.RadiusY = 5;
+
+                            left.Data = leftEll;
+
+                            currentPath.Add(left);
+                            Canvas.Children.Add(left);
+
+                        }
+                    }
+                }
+                
+                timer.Start();
+                AdventureLandLibrary.Geometry.Point[] finalPath;
+
+                if (chkFunnel.IsChecked.Value)
+                {
+                    var funneled = FunnelSmooth(nodes.ToList(), pathStartPoint, PathEndPoint);
+                    var smoothed = currentMap.SmoothPath(funneled.ToArray());
+                    finalPath = smoothed;
+                }
+                else if(chkSmooth.IsChecked.Value)
+                {
+                    List<AdventureLandLibrary.Geometry.Point> rawPath = new List<AdventureLandLibrary.Geometry.Point>();
+
+                    rawPath.Add(pathStartPoint);
+                    var path = nodes.Select(p => new AdventureLandLibrary.Geometry.Point(p.center.X - currentMap.OffsetX, p.center.Y - currentMap.OffsetY)).ToArray();
+                    rawPath.AddRange(path);
+                    rawPath.Add(PathEndPoint);
+
+
+                    finalPath = currentMap.SmoothPath(rawPath.ToArray());
+                }
+                else
+                {
+                    timer.Reset();
+                    timer.Start();
+                    var pathTest = currentMap.FindPath(pathStartPoint, PathEndPoint);
+                    var smoothed = currentMap.SmoothPath(pathTest);
+
+                    finalPath = smoothed;
+
+                }
                 timer.Stop();
                 PathTime.Content = timer.ElapsedMilliseconds;
 
-                for (var i = 0; i < smoothed.Length - 1; i++)
+                for (var i = 0; i < finalPath.Length - 1; i++)
                 {
-                    var p1 = smoothed[i];
-                    var p2 = smoothed[i + 1];
+                    var p1 = finalPath[i];
+                    var p2 = finalPath[i + 1];
                     var line2 = new Line();
                     line2.X1 = p1.X - xOffset + currentMap.OffsetX;
                     line2.X2 = p2.X - xOffset + currentMap.OffsetX;
@@ -443,23 +475,26 @@ namespace DataViewer
 
         public void DrawLine(AdventureLandLibrary.Geometry.LineD line, Brush color, int thickness = 1)
         {
-            timer.Stop();
-            var p1 = line.P1;
-            var p2 = line.P2;
-            var line2 = new Line();
-            line2.X1 = p1.X - xOffset;
-            line2.X2 = p2.X - xOffset;
-            line2.Y1 = p1.Y - yOffset;
-            line2.Y2 = p2.Y - yOffset;
+            if (chkDebugFunnel.IsChecked.Value)
+            {
+                timer.Stop();
+                var p1 = line.P1;
+                var p2 = line.P2;
+                var line2 = new Line();
+                line2.X1 = p1.X - xOffset;
+                line2.X2 = p2.X - xOffset;
+                line2.Y1 = p1.Y - yOffset;
+                line2.Y2 = p2.Y - yOffset;
 
-            line2.StrokeThickness = thickness;
-            line2.Stroke = color;
+                line2.StrokeThickness = thickness;
+                line2.Stroke = color;
 
-            line2.MouseRightButtonDown += Window_MouseRightButtonDown;
+                line2.MouseRightButtonDown += Window_MouseRightButtonDown;
 
-            //currentPath.Add(line2);
-            //Canvas.Children.Add(line2);
-            timer.Start();
+                currentPath.Add(line2);
+                Canvas.Children.Add(line2);
+                timer.Start();
+            }
         }
 
         public List<AdventureLandLibrary.Geometry.Point> FunnelSmooth(List<AdventureLandLibrary.Geometry.GraphNode> path, AdventureLandLibrary.Geometry.Point startPoint, AdventureLandLibrary.Geometry.Point endPoint)
@@ -594,7 +629,7 @@ namespace DataViewer
                     {
                         if (!leftIsLeftOfRight)
                         {
-                            currentNode = new AdventureLandLibrary.Geometry.PointD(portals[newFunnelRightIndex].P1.X, portals[newFunnelRightIndex].P1.Y);
+                            currentNode = new AdventureLandLibrary.Geometry.PointD(portals[funnelRightIndex].P1.X, portals[funnelRightIndex].P1.Y);
 
                             newPath.Add(new AdventureLandLibrary.Geometry.Point((int)currentNode.X - currentMap.OffsetX, (int)currentNode.Y - currentMap.OffsetY));
                             //funnelLeftIndex = newFunnelLeftIndex;
@@ -617,7 +652,7 @@ namespace DataViewer
                         }
                         else if (!rightIsRightOfLeft)
                         {
-                            currentNode = new AdventureLandLibrary.Geometry.PointD(portals[newFunnelLeftIndex].P2.X, portals[newFunnelLeftIndex].P2.Y);
+                            currentNode = new AdventureLandLibrary.Geometry.PointD(portals[funnelLeftIndex].P2.X, portals[funnelLeftIndex].P2.Y);
 
                             newPath.Add(new AdventureLandLibrary.Geometry.Point((int)currentNode.X - currentMap.OffsetX, (int)currentNode.Y - currentMap.OffsetY));
 
@@ -732,11 +767,11 @@ namespace DataViewer
                 int nextIndex = leftIndex + 1;
                 AdventureLandLibrary.Geometry.PointD nextPoint = portals[nextIndex].P2;
 
-                while (curPoint.X == nextPoint.X && curPoint.Y == nextPoint.Y && nextIndex < portals.Count - 1)
-                {
-                    nextIndex++;
-                    nextPoint = portals[nextIndex].P2;
-                }
+                //while (curPoint.X == nextPoint.X && curPoint.Y == nextPoint.Y && nextIndex < portals.Count - 1)
+                //{
+                //    nextIndex++;
+                //    nextPoint = portals[nextIndex].P2;
+                //}
 
                 return nextIndex;
             }
@@ -755,11 +790,11 @@ namespace DataViewer
                 int nextIndex = rightIndex + 1;
                 AdventureLandLibrary.Geometry.PointD nextPoint = portals[nextIndex].P1;
 
-                while (curPoint.X == nextPoint.X && curPoint.Y == nextPoint.Y && nextIndex < portals.Count - 1)
-                {
-                    nextIndex++;
-                    nextPoint = portals[nextIndex].P2;
-                }
+                //while (curPoint.X == nextPoint.X && curPoint.Y == nextPoint.Y && nextIndex < portals.Count - 1)
+                //{
+                //    nextIndex++;
+                //    nextPoint = portals[nextIndex].P2;
+                //}
 
                 return nextIndex;
             }
@@ -787,5 +822,6 @@ namespace DataViewer
             var endPoint = GetMouseMapPoint();
             PathEndPoint = endPoint;
         }
+
     }
 }

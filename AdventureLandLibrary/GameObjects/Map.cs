@@ -73,9 +73,14 @@ namespace AdventureLandLibrary.GameObjects
 
                 PointMap = new PointMap(Width, Height, OffsetX, OffsetY);
 
+                int xBufferMin = 9;
+                int xBufferMax = 9;
+                int yBufferMin = 4;
+                int yBufferMax = 8;
+
                 foreach (var line in lines)
                 {
-                    PointMap.DrawWall(line, 9, 9, 4, 8);
+                    PointMap.DrawWall(line, xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                 }
 
                 var spawns = ((JObject)(Loader.data.maps))[MapID]["spawns"];
@@ -99,10 +104,10 @@ namespace AdventureLandLibrary.GameObjects
                     var p3 = new Point(MaxX, MaxY);
                     var p4 = new Point(MaxX, MinY);
 
-                    PointMap.DrawWall(new Line(p1, p2), 9, 9, 4, 8);
-                    PointMap.DrawWall(new Line(p2, p3), 9, 9, 4, 8);
-                    PointMap.DrawWall(new Line(p3, p4), 9, 9, 4, 8);
-                    PointMap.DrawWall(new Line(p4, p1), 9, 9, 4, 8);
+                    PointMap.DrawWall(new Line(p1, p2), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+                    PointMap.DrawWall(new Line(p2, p3), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+                    PointMap.DrawWall(new Line(p3, p4), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+                    PointMap.DrawWall(new Line(p4, p1), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                 //}
 
                 Mesh = PointMap.BuildMesh();

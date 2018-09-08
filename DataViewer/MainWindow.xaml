@@ -12,6 +12,8 @@
         <Canvas Name="Canvas" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,51,0,0" MouseLeftButtonDown="Window_MouseLeftButtonDown" MouseLeftButtonUp="Window_MouseLeftButtonUp" MouseMove="Window_MouseMove"/>
         <CheckBox Name="chkSmooth" Content="Smooth Path" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top"/>
         <Label Name="PathTime" Content="" HorizontalAlignment="Left" Margin="1134,10,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="chkFunnel" Content="Funnel Path" HorizontalAlignment="Left" Margin="238,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.146,0.667"/>
+        <CheckBox Name="chkDebugFunnel" Content="Debug Funnel" HorizontalAlignment="Left" Margin="325,10,0,0" VerticalAlignment="Top"/>
         <!--<Image x:Name="image" Stretch="None"    Margin="10,37,257,32"/>-->
 
 

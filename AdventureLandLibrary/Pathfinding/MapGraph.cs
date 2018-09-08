@@ -13,6 +13,7 @@ namespace AdventureLandLibrary.Pathfinding
     {
         //Graph<Point, string> graph;
         Dictionary<PointStruct, uint> pointMapping;
+        Dictionary<GraphNode, uint> nodeMapping;
         Graph<GraphNode, string> triGraph;
         Line[] exteriorEdges;
         Line[] interiorEdges;
@@ -46,6 +47,7 @@ namespace AdventureLandLibrary.Pathfinding
         {
             triGraph = new Graph<GraphNode, string>();
             pointMapping = new Dictionary<PointStruct, uint>();
+            nodeMapping = new Dictionary<GraphNode, uint>();
 
             foreach (var tri in mesh.Triangles)
             {
@@ -56,6 +58,7 @@ namespace AdventureLandLibrary.Pathfinding
                 {
                     var id = triGraph.AddNode(node);
                     pointMapping.Add(node.center, id);
+                    nodeMapping.Add(node, id);
                 }
 
                 var cID = pointMapping[node.center];
@@ -72,6 +75,7 @@ namespace AdventureLandLibrary.Pathfinding
                         {
                             var id = triGraph.AddNode(neighborNode);
                             pointMapping.Add(neighborNode.center, id);
+                            nodeMapping.Add(neighborNode, id);
                         }
 
 
@@ -87,43 +91,105 @@ namespace AdventureLandLibrary.Pathfinding
             }
         }
 
-        public List<Point> TunnelSmooth(List<GraphNode> path)
+        public List<Point> FunnelSmooth(List<GraphNode> path, Point startPoint, Point endPoint)
         {
-            if (path.Count > 6)
+            if (path.Count > 2)
             {
+                var offsetEndpoint = new Point(endPoint.X + xOffset, endPoint.Y + yOffset);
+
                 List<Point> newPath = new List<Point>();
 
                 List<LineD> portals = new List<LineD>();
 
-                for (var i = 0; i < path.Count - 2; i++)
+                for (var i = 0; i < path.Count - 1; i++)
                 {
                     portals.Add(path[i].GetPortal(path[i + 1]));
                 }
 
-                PointD currentNode = new PointD(path[0].center.X, path[0].center.Y);
+                var ending = path[path.Count - 1].GetNonPortal(path[path.Count - 2], offsetEndpoint);
+
+                portals.AddRange(ending);
+
+                PointD currentNode = new PointD(startPoint.X + xOffset, startPoint.Y + yOffset);
 
                 newPath.Add(new Point((int)currentNode.X - xOffset, (int)currentNode.Y - yOffset));
 
                 int funnelLeftIndex = 1;
                 int funnelRightIndex = 1;
 
-                int currentPortal = 0;
+                int curFunnelLeftIndex = 1;
+                int curFunnelRightIndex = 1;
 
                 LineD funnelLeft = new LineD(currentNode, portals[0].P2);
                 LineD funnelRight = new LineD(currentNode, portals[0].P1);
 
-                while (funnelLeftIndex < portals.Count && funnelRightIndex < portals.Count)
+                int leftSide = 0;
+                int rightSide = 1;
+
+                PointD lastPoint = new PointD(offsetEndpoint.X, offsetEndpoint.Y);
+
+                int count = 0;
+                while (funnelLeftIndex < portals.Count && funnelRightIndex < portals.Count && !(funnelLeft.P2.X == lastPoint.X && funnelLeft.P2.Y == lastPoint.Y) && !(funnelRight.P2.X == lastPoint.X && funnelRight.P2.Y == lastPoint.Y))
                 {
-                    var leftPortal = portals[funnelLeftIndex];
-                    var rightPortal = portals[funnelRightIndex];
+
+                    var prevLeftPoint = portals[funnelLeftIndex].P2;
+
+                    if (leftSide == 0 && funnelLeftIndex > 0)
+                    {
+                        prevLeftPoint = portals[funnelLeftIndex - 1].P2;
+                    }
+
+                    var prevRightPoint = portals[funnelRightIndex].P1;
+
+                    if (rightSide == 0 && funnelRightIndex > 0)
+                    {
+                        prevRightPoint = portals[funnelRightIndex - 1].P1;
+                    }
+
+                    var newFunnelLeftIndex = funnelLeftIndex + leftSide;
+                    var newFunnelRightIndex = funnelRightIndex + rightSide;
+
+                    if (newFunnelLeftIndex > portals.Count - 1)
+                    {
+                        newFunnelLeftIndex = portals.Count - 1;
+                    }
+
+                    if (newFunnelRightIndex > portals.Count - 1)
+                    {
+                        newFunnelRightIndex = portals.Count - 1;
+                    }
+
+                    curFunnelLeftIndex = curFunnelLeftIndex + leftSide;
+                    curFunnelRightIndex = curFunnelRightIndex + rightSide;
+
+                    if (curFunnelLeftIndex > portals.Count - 1)
+                    {
+                        curFunnelLeftIndex = portals.Count - 1;
+                    }
+
+                    if (curFunnelRightIndex > portals.Count - 1)
+                    {
+                        curFunnelRightIndex = portals.Count - 1;
+                    }
+
+                    var actualLeftPoint = portals[newFunnelLeftIndex].P2;
+                    var actualRightPoint = portals[newFunnelRightIndex].P1;
+
+                    var leftPoint = portals[curFunnelLeftIndex].P2;
+
+                    var rightPoint = portals[curFunnelRightIndex].P1;
 
                     var insideFunnel = false;
 
-                    var leftIsRightOfLeft = funnelLeft.Direction(leftPortal.P2) <= 0;
-                    var rightIsLeftOfRight = funnelRight.Direction(rightPortal.P1) >= 0;
+                    var dirLeftLeft = funnelLeft.Direction(leftPoint);
+                    var dirRightRight = funnelRight.Direction(rightPoint);
+                    var leftIsRightOfLeft = funnelLeft.Direction(leftPoint) <= 0;
+                    var rightIsLeftOfRight = funnelRight.Direction(rightPoint) >= 0;
 
-                    var leftIsLeftOfRight = funnelRight.Direction(leftPortal.P2) >= 0;
-                    var rightIsRightOfLeft = funnelLeft.Direction(rightPortal.P1) <= 0;
+                    var dirLeftRight = funnelRight.Direction(leftPoint);
+                    var dirRightLeft = funnelLeft.Direction(rightPoint);
+                    var leftIsLeftOfRight = funnelRight.Direction(leftPoint) >= 0;
+                    var rightIsRightOfLeft = funnelLeft.Direction(rightPoint) <= 0;
 
                     if (leftIsRightOfLeft && rightIsLeftOfRight && leftIsLeftOfRight && rightIsRightOfLeft)
                     {
@@ -132,34 +198,139 @@ namespace AdventureLandLibrary.Pathfinding
 
                     if (!insideFunnel)
                     {
-                        funnelLeftIndex += 1;
-                        funnelRightIndex += 1;
+                        if (!leftIsLeftOfRight)
+                        {
+                            currentNode = new PointD(portals[funnelRightIndex].P1.X, portals[funnelRightIndex].P1.Y);
+
+                            newPath.Add(new Point((int)currentNode.X - xOffset, (int)currentNode.Y - yOffset));
+
+                            var minIndex = Math.Min(newFunnelLeftIndex, newFunnelRightIndex);
+
+                            var newFRight = NextRight(minIndex, portals);
+                            var newFLeft = NextLeft(minIndex, portals);
+
+                            var maxPortal = Math.Max(newFRight, newFLeft);
+
+                            funnelLeftIndex = maxPortal;
+                            funnelRightIndex = maxPortal;
+                            funnelLeft = new LineD(currentNode, portals[maxPortal].P2);
+                            funnelRight = new LineD(currentNode, portals[maxPortal].P1);
+                            curFunnelLeftIndex = maxPortal;
+                            curFunnelRightIndex = maxPortal;
+                        }
+                        else if (!rightIsRightOfLeft)
+                        {
+                            currentNode = new PointD(portals[funnelLeftIndex].P2.X, portals[funnelLeftIndex].P2.Y);
+
+                            newPath.Add(new Point((int)currentNode.X - xOffset, (int)currentNode.Y - yOffset));
+
+                            var minIndex = Math.Min(newFunnelLeftIndex, newFunnelRightIndex);
+
+                            var newFRight = NextRight(minIndex, portals);
+                            var newFLeft = NextLeft(minIndex, portals);
+
+                            var maxPortal = Math.Max(newFRight, newFLeft);
+
+                            funnelLeftIndex = maxPortal;
+                            funnelRightIndex = maxPortal;
+                            funnelLeft = new LineD(currentNode, portals[maxPortal].P2);
+                            funnelRight = new LineD(currentNode, portals[maxPortal].P1);
+                            curFunnelLeftIndex = maxPortal;
+                            curFunnelRightIndex = maxPortal;
+                        }
+                        else if (rightIsLeftOfRight)
+                        {
+                            funnelRight = new LineD(currentNode, rightPoint);
+                        }
+                        else if (leftIsRightOfLeft)
+                        {
+                            funnelLeft = new LineD(currentNode, leftPoint);
+                        }
                     }
                     else
                     {
-                        funnelLeftIndex += 1;
-                        funnelRightIndex += 1;
+                        var newfunnelLeft = new LineD(currentNode, leftPoint);
+                        var newfunnelRight = new AdventureLandLibrary.Geometry.LineD(currentNode, rightPoint);
 
-                        funnelLeft = new LineD(currentNode, leftPortal.P2);
-                        funnelRight = new LineD(currentNode, rightPortal.P1);
+                        funnelLeftIndex = newFunnelLeftIndex;
+                        funnelRightIndex = newFunnelRightIndex;
+                        funnelLeft = newfunnelLeft;
+                        funnelRight = newfunnelRight;
+                        curFunnelLeftIndex = funnelLeftIndex;
+                        curFunnelRightIndex = funnelRightIndex;
+                    }
+                    leftSide++;
+                    rightSide++;
+
+                    if (leftSide > 1)
+                    {
+                        leftSide = 0;
                     }
 
+                    if (rightSide > 1)
+                    {
+                        rightSide = 0;
+                    }
+                    count++;
                 }
 
-                newPath.Add(new Point(path.Last().center.X - xOffset, path.Last().center.Y - yOffset));
-
+                newPath.Add(new Point(endPoint.X, endPoint.Y));
                 return newPath;
             }
             else
             {
                 List<Point> newPath = new List<Point>();
 
-                foreach (var node in path)
-                {
-                    newPath.Add(new Point(node.center));
-                }
+                newPath.Add(startPoint);
+                newPath.Add(endPoint);
 
                 return newPath;
+            }
+        }
+
+        public int NextLeft(int leftIndex, List<LineD> portals)
+        {
+            var curPoint = portals[leftIndex].P2;
+
+            if (leftIndex < portals.Count - 1)
+            {
+                int nextIndex = leftIndex + 1;
+                PointD nextPoint = portals[nextIndex].P2;
+
+                //while (curPoint.X == nextPoint.X && curPoint.Y == nextPoint.Y && nextIndex < portals.Count - 1)
+                //{
+                //    nextIndex++;
+                //    nextPoint = portals[nextIndex].P2;
+                //}
+
+                return nextIndex;
+            }
+            else
+            {
+                return leftIndex;
+            }
+        }
+
+        public int NextRight(int rightIndex, List<LineD> portals)
+        {
+            var curPoint = portals[rightIndex].P1;
+
+            if (rightIndex < portals.Count - 1)
+            {
+                int nextIndex = rightIndex + 1;
+                PointD nextPoint = portals[nextIndex].P1;
+
+                //while (curPoint.X == nextPoint.X && curPoint.Y == nextPoint.Y && nextIndex < portals.Count - 1)
+                //{
+                //    nextIndex++;
+                //    nextPoint = portals[nextIndex].P2;
+                //}
+
+                return nextIndex;
+            }
+            else
+            {
+                return rightIndex;
             }
         }
 
@@ -332,24 +503,43 @@ namespace AdventureLandLibrary.Pathfinding
 
         private uint? GetNearestNode(PointStruct point)
         {
-            var sortedKeys = pointMapping.Keys.OrderBy(e => e.Distance(point));
+            
+            KeyValuePair<GraphNode, uint>? insideNode = null;
 
-            foreach (var key in sortedKeys)
+            foreach (var node in nodeMapping)
             {
-
-                if (!pointMap.IsOffsetInsideMap(new Point(point.X, point.Y)))
+                if (node.Key.PointInNode(new PointD(point.X, point.Y)))
                 {
-                    return pointMapping[key];
+                    insideNode = node;
+                    break;
                 }
-                else
+            }
+
+            if (insideNode == null)
+            {
+                var sortedKeys = pointMapping.Keys.OrderBy(e => e.Distance(point));
+
+                foreach (var key in sortedKeys)
                 {
-                    //var crossesEdge = LineCrossesEdge(new Line(new Point(point.X, point.Y), new Point(key.X, key.Y)));
-                    var isInterior = pointMap.IsOffsetInterior(new Line(new Point(point.X, point.Y), new Point(key.X, key.Y)));
-                    if (isInterior)
+
+                    if (!pointMap.IsOffsetInsideMap(new Point(point.X, point.Y)))
                     {
                         return pointMapping[key];
                     }
+                    else
+                    {
+                        //var crossesEdge = LineCrossesEdge(new Line(new Point(point.X, point.Y), new Point(key.X, key.Y)));
+                        var isInterior = pointMap.IsOffsetInterior(new Line(new Point(point.X, point.Y), new Point(key.X, key.Y)));
+                        if (isInterior)
+                        {
+                            return pointMapping[key];
+                        }
+                    }
                 }
+            }
+            else
+            {
+                return insideNode.Value.Value;
             }
 
             return null;
@@ -428,7 +618,7 @@ namespace AdventureLandLibrary.Pathfinding
                 }
                 //pathNodes.Add(triGraph[nodeTo.Value].Item);
 
-                var test = TunnelSmooth(pathNodes);
+                //var test = TunnelSmooth(pathNodes);
 
                 return pathNodes.ToArray();
             }
@@ -441,6 +631,8 @@ namespace AdventureLandLibrary.Pathfinding
         public Point[] GetPath(Point from, Point to)
         {
 
+            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+            timer.Start();
             var toStruct = new PointStruct(to);
             if (!pointMap.IsInsideMap(to))
             {
@@ -452,20 +644,24 @@ namespace AdventureLandLibrary.Pathfinding
             {
                 fromStruct = GetClosestPointOnEdge(from);
             }
-
+            
             var nodeFrom = GetNearestNode(new PointStruct(fromStruct.X + xOffset, fromStruct.Y + yOffset));
-
+            timer.Stop();
+            timer.Reset();
             var nodeTo = GetNearestNode(new PointStruct(toStruct.X + xOffset, toStruct.Y + yOffset));
-
+            
             if (nodeFrom != null && nodeTo != null)
             {
-                System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
-
                 timer.Start();
                 var shortestPath = triGraph.Dijkstra(nodeFrom.Value, nodeTo.Value);
+
                 timer.Stop();
 
+                timer.Reset();
+
+                timer.Start();
                 var path = shortestPath.GetPath();
+                timer.Stop();
                 List<Point> pathPoints = new List<Point>();
                 if (pointMap.IsOffsetInsideMap(new Point(fromStruct.X + xOffset, fromStruct.Y + yOffset)))
                 {
@@ -483,9 +679,9 @@ namespace AdventureLandLibrary.Pathfinding
 
                     pathNodes.Add(tri);
                 }
-                pathNodes.Add(triGraph[nodeTo.Value].Item);
+                //pathNodes.Add(triGraph[nodeTo.Value].Item);
 
-                var test = TunnelSmooth(pathNodes);
+                var test = FunnelSmooth(pathNodes, new Point(fromStruct), new Point(toStruct));
 
                 pathPoints.AddRange(test);
 

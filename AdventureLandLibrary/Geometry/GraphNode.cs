@@ -17,6 +17,44 @@ namespace AdventureLandLibrary.Geometry
             this.center = new PointStruct(triangle.GetCentroid());
         }
 
+        double sign(PointD p1, PointD p2, PointD p3)
+        {
+            return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
+        }
+
+        public bool point_inside_trigon(PointD s)
+        {
+            var a = new PointD(triangle.GetVertex(0).X, triangle.GetVertex(0).Y);
+            var b = new PointD(triangle.GetVertex(1).X, triangle.GetVertex(1).Y);
+            var c = new PointD(triangle.GetVertex(2).X, triangle.GetVertex(2).Y);
+
+            double as_x = s.X - a.X;
+            double as_y = s.Y - a.Y;
+
+            bool s_ab = (b.X - a.X) * as_y - (b.Y - a.Y) * as_x > 0;
+
+            if ((c.X - a.X) * as_y - (c.Y - a.Y) * as_x > 0 == s_ab) return false;
+
+            if ((c.X - b.X) * (s.Y - b.Y) - (c.Y - b.Y) * (s.X - b.X) > 0 != s_ab) return false;
+
+            return true;
+        }
+
+        public bool PointInNode(PointD pt)
+        {
+            var v1 = new PointD(triangle.GetVertex(0).X, triangle.GetVertex(0).Y);
+            var v2 = new PointD(triangle.GetVertex(1).X, triangle.GetVertex(1).Y);
+            var v3 = new PointD(triangle.GetVertex(2).X, triangle.GetVertex(2).Y);
+
+
+            bool b1, b2, b3;
+
+            b1 = sign(pt, v1, v2) < 0.0f;
+            b2 = sign(pt, v2, v3) < 0.0f;
+            b3 = sign(pt, v3, v1) < 0.0f;
+
+            return ((b1 == b2) && (b2 == b3));
+        }
 
         public LineD GetPortal(GraphNode neighbor)
         {
