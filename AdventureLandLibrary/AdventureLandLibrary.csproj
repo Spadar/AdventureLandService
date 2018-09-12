@@ -65,8 +65,10 @@
     <Compile Include="Geometry\Rect.cs" />
     <Compile Include="Global\Loader.cs" />
     <Compile Include="ImageManipulation\LockBitmap.cs" />
+    <Compile Include="Pathfinding\MapConnection.cs" />
     <Compile Include="Pathfinding\MapGraph.cs" />
     <Compile Include="Pathfinding\PathNode.cs" />
+    <Compile Include="Pathfinding\WorldGraph.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

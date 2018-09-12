@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AdventureLandLibrary.Geometry;
@@ -25,6 +26,8 @@ namespace AdventureLandLibrary.GameObjects
 
         public PointMap PointMap;
 
+        public List<MapConnection> Connections;
+
         public TriangleNet.Mesh Mesh;
 
         public Line[] edges;
@@ -33,7 +36,9 @@ namespace AdventureLandLibrary.GameObjects
 
         public Map(string MapID)
         {
+            Console.WriteLine("Initializing Map: {0}", MapID);
             this.MapID = MapID;
+
             var mapData = (JObject)(Loader.data.geometry)[MapID];
 
             if(mapData != null)
@@ -51,23 +56,28 @@ namespace AdventureLandLibrary.GameObjects
                 OffsetY = Math.Abs((int)((dynamic)mapData["min_y"]));
 
                 List<Line> lines = new List<Line>();
-
-                foreach (var xLine in mapData["x_lines"])
+                if (mapData.Properties().Where(p => p.Name == "x_lines").FirstOrDefault() != null)
                 {
-                    var line = new Line(new Point((int)xLine[0], (int)xLine[1]), new Point((int)xLine[0], (int)xLine[2]));
-
-                    if (line.Points.Length > 1)
+                    foreach (var xLine in mapData["x_lines"])
                     {
-                        lines.Add(line);
+                        var line = new Line(new Point((int)xLine[0], (int)xLine[1]), new Point((int)xLine[0], (int)xLine[2]));
+
+                        if (line.Points.Length > 1)
+                        {
+                            lines.Add(line);
+                        }
                     }
                 }
 
-                foreach (var yLine in mapData["y_lines"])
+                if (mapData.Properties().Where(p => p.Name == "y_lines").FirstOrDefault() != null)
                 {
-                    var line = new Line(new Point((int)yLine[1], (int)yLine[0]), new Point((int)yLine[2], (int)yLine[0]));
-                    if (line.Points.Length > 1)
+                    foreach (var yLine in mapData["y_lines"])
                     {
-                        lines.Add(line);
+                        var line = new Line(new Point((int)yLine[1], (int)yLine[0]), new Point((int)yLine[2], (int)yLine[0]));
+                        if (line.Points.Length > 1)
+                        {
+                            lines.Add(line);
+                        }
                     }
                 }
 
@@ -109,21 +119,84 @@ namespace AdventureLandLibrary.GameObjects
                     PointMap.DrawWall(new Line(p3, p4), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                     PointMap.DrawWall(new Line(p4, p1), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                 //}
-
                 Mesh = PointMap.BuildMesh();
 
                 this.edges = PointMap.GetEdges();
-
                 
                 PointMap.FillMeshEdges(Mesh);
 
-
                 graph = new MapGraph(Mesh, PointMap, OffsetX, OffsetY);
 
+                GetMapConnections();
             }
             else
             {
                 throw new Exception("Map Doesn't Exist.");
+            }
+        }
+
+        public void GetMapConnections()
+        {
+            Connections = new List<MapConnection>();
+            var mapData = (JObject)(Loader.data.maps)[MapID];
+
+            foreach(var door in mapData["doors"])
+            {
+                var values = door.Values().ToArray();
+                var connection = new MapConnection();
+                connection.isRoot = false;
+                connection.MapName = MapID;
+                connection.SpawnID = (int)values[6].ToObject(typeof(int));
+                connection.ConnectedSpawnID = (int)values[5].ToObject(typeof(int));
+
+                if(connection.ConnectedSpawnID == 4 && connection.MapName == "level3")
+                {
+                    connection.ConnectedSpawnID = 2;
+                }
+
+                connection.ConnectedMap = (string)values[4].ToObject(typeof(string));
+                var spawn = mapData["spawns"][connection.SpawnID];
+                connection.SpawnPoint = new PointStruct((int)spawn[0].ToObject(typeof(int)), (int)spawn[1].ToObject(typeof(int)));
+
+                var connectedMapData = (JObject)(Loader.data.maps)[connection.ConnectedMap];
+                var connectedSpawn = connectedMapData["spawns"][connection.ConnectedSpawnID];
+                connection.ConnectedSpawnPoint = new PointStruct((int)connectedSpawn[0].ToObject(typeof(int)), (int)connectedSpawn[1].ToObject(typeof(int)));
+
+                Connections.Add(connection);
+            }
+
+            var transportPlaces = (JObject)Loader.data.npcs.transporter.places;
+
+            var transporterMaps = transportPlaces.Properties().Select(p => p.Name);
+
+            if(transporterMaps.Contains(MapID))
+            {
+                var transportSpawn = (int)transportPlaces[MapID].ToObject(typeof(int));
+
+                foreach(var otherMap in transporterMaps)
+                {
+                    if(otherMap != MapID)
+                    {
+                        var otherSpawn = (int)transportPlaces[otherMap].ToObject(typeof(int));
+
+                        var connection = new MapConnection();
+
+                        connection.isRoot = false;
+                        connection.MapName = MapID;
+                        connection.SpawnID = transportSpawn;
+                        connection.ConnectedMap = otherMap;
+                        connection.ConnectedSpawnID = otherSpawn;
+
+                        var spawn = mapData["spawns"][connection.SpawnID];
+                        connection.SpawnPoint = new PointStruct((int)spawn[0].ToObject(typeof(int)), (int)spawn[1].ToObject(typeof(int)));
+
+                        var connectedMapData = (JObject)(Loader.data.maps)[connection.ConnectedMap];
+                        var connectedSpawn = connectedMapData["spawns"][connection.ConnectedSpawnID];
+                        connection.ConnectedSpawnPoint = new PointStruct((int)connectedSpawn[0].ToObject(typeof(int)), (int)connectedSpawn[1].ToObject(typeof(int)));
+
+                        Connections.Add(connection);
+                    }
+                }
             }
         }
 
@@ -135,6 +208,21 @@ namespace AdventureLandLibrary.GameObjects
         public GraphNode[] FindPathDebug(Point start, Point end)
         {
             return graph.GetPathDebug(start, end);
+        }
+
+        public double PathDistance(Point[] path)
+        {
+            double dist = 0;
+
+            for(var i = 0; i < path.Length - 1; i++)
+            {
+                var p1 = path[i];
+                var p2 = path[i + 1];
+
+                dist += p1.Distance(p2);
+            }
+
+            return dist;
         }
 
         public Point[] SmoothPath(Point[] path)

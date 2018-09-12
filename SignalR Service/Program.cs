@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using AdventureLandLibrary.GameObjects;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Hosting;
@@ -15,6 +16,8 @@ namespace SignalR_Service
     {
         static void Main(string[] args)
         {
+            Maps.Load();
+
             // This will *ONLY* bind to localhost, if you want to bind to all addresses
             // use http://*:8080 to bind to all addresses. 
             // See http://msdn.microsoft.com/library/system.net.httplistener.aspx 

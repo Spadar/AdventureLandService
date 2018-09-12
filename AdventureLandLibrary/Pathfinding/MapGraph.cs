@@ -27,6 +27,7 @@ namespace AdventureLandLibrary.Pathfinding
             this.pointMap = pointMap;
             this.xOffset = xOffset;
             this.yOffset = yOffset;
+
             CreateTriangleGraph(mesh);
 
             List<Line> edges = new List<Line>();
@@ -39,8 +40,6 @@ namespace AdventureLandLibrary.Pathfinding
             }
 
             this.interiorEdges = edges.ToArray();
-
-            this.exteriorEdges = pointMap.GetEdges();
         }
 
         private void CreateTriangleGraph(TriangleNet.Mesh mesh)

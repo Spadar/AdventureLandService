@@ -11,6 +11,10 @@ namespace AdventureLandLibrary.Pathfinding
         public int X { get; set; }
         public int Y { get; set; }
 
+        public string Action { get; set; }
+        public string ActionTarget { get; set; }
+        public int TargetSpawn { get; set; }
+
         public PathNode(int x, int y)
         {
             this.X = x;
@@ -18,6 +22,12 @@ namespace AdventureLandLibrary.Pathfinding
         }
 
         public PathNode(Geometry.Point point)
+        {
+            this.X = point.X;
+            this.Y = point.Y;
+        }
+
+        public PathNode(Geometry.PointStruct point)
         {
             this.X = point.X;
             this.Y = point.Y;

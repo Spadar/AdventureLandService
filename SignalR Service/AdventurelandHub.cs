@@ -13,7 +13,6 @@ namespace SignalR_Service
 {
     public class AdventurelandHub : Hub
     {
-        static Dictionary<string, Map> maps = new Dictionary<string, Map>();
         public void Send(string name, string message)
         {
             Clients.All.addMessage(name, message);
@@ -26,13 +25,13 @@ namespace SignalR_Service
 
         public void GetMesh(string mapID)
         {
-            if (!maps.ContainsKey(mapID))
+            if (!Maps.MapDictionary.ContainsKey(mapID))
             {
                 var newMap = new Map(mapID);
-                maps.Add(mapID, newMap);
+                Maps.MapDictionary.Add(mapID, newMap);
             }
 
-            var map = maps[mapID];
+            var map = Maps.MapDictionary[mapID];
 
             var mesh = map.Mesh;
 
@@ -91,21 +90,24 @@ namespace SignalR_Service
 
                 var to = new Point((int)obj.To.X, (int)obj.To.Y);
                 var from = new Point((int)obj.From.X, (int)obj.From.Y);
-                string mapID = obj.map;
+                string mapFrom = obj.From.Map;
+                string mapTo = obj.To.Map;
 
                 //Console.WriteLine("Finding path!");
-                if (!maps.ContainsKey(mapID))
-                {
-                    var newMap = new Map(mapID);
-                    maps.Add(mapID, newMap);
-                }
+                //if (!Maps.MapDictionary.ContainsKey(mapID))
+                //{
+                //    var newMap = new Map(mapID);
+                //    Maps.MapDictionary.Add(mapID, newMap);
+                //}
 
-                var map = maps[mapID];
+                //var map = Maps.MapDictionary[mapID];
 
-                var path = map.FindPath(from, to);
-                var smoothed = map.SmoothPath(path);
+                //var path = map.FindPath(from, to);
+                //var smoothed = map.SmoothPath(path);
 
-                Clients.Caller.PathFound(smoothed);
+                var path = Maps.FindPath(from, to, mapFrom, mapTo, false);
+
+                Clients.Caller.PathFound(path);
                 timer.Stop();
                 Console.WriteLine("Path found in {0} ms", timer.ElapsedMilliseconds);
             }
