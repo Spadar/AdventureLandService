@@ -1,0 +1,41 @@
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Scripts\jquery-1.6.4-vsdoc.js
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Scripts\jquery-1.6.4.js
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Scripts\jquery-1.6.4.min.js
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Scripts\jquery.signalR-2.3.0.js
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Scripts\jquery.signalR-2.3.0.min.js
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\SignalR Service.exe.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\SignalR Service.exe
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\SignalR Service.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.AspNet.SignalR.Client.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Cors.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Host.HttpListener.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Hosting.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Security.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Newtonsoft.Json.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Owin.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\System.Web.Cors.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Dijkstra.NET.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\AdventureLandLibrary.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\AdventureLandLibrary.dll.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.AspNet.SignalR.Client.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.AspNet.SignalR.Core.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.AspNet.SignalR.SystemWeb.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Cors.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Host.HttpListener.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Hosting.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Microsoft.Owin.Security.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\bin\Release\Newtonsoft.Json.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\obj\Release\SignalR Service.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\obj\Release\SignalR Service.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\obj\Release\SignalR Service.csproj.CopyComplete
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\obj\Release\SignalR Service.exe
+C:\Users\lorna\Documents\GitHub\AdventureLandService\SignalR Service\obj\Release\SignalR Service.pdb

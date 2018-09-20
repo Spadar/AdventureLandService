@@ -1,0 +1,6 @@
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\bin\Release\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\bin\Release\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Release\Triangle.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Release\Triangle.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Release\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Triangle\obj\Release\Triangle.pdb

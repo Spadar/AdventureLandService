@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AdventureLandLibrary.Geometry;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using AdventureLandLibrary.Pathfinding;
 
 namespace SignalR_Service
 {

@@ -1,0 +1,14 @@
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\AdventureLandLibrary.dll.config
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\AdventureLandLibrary.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\Dijkstra.NET.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\JsonDiffPatchDotNet.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\Newtonsoft.Json.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\Triangle.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\Triangle.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\bin\Release\Newtonsoft.Json.xml
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\obj\Release\AdventureLandLibrary.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\obj\Release\AdventureLandLibrary.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\obj\Release\AdventureLandLibrary.csproj.CopyComplete
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\obj\Release\AdventureLandLibrary.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\AdventureLandLibrary\obj\Release\AdventureLandLibrary.pdb

@@ -30,6 +30,8 @@ namespace AdventureLandLibrary.GameObjects
 
         public TriangleNet.Mesh Mesh;
 
+        public Polygon poly;
+
         public Line[] edges;
 
         private MapGraph graph;
@@ -119,7 +121,10 @@ namespace AdventureLandLibrary.GameObjects
                     PointMap.DrawWall(new Line(p3, p4), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                     PointMap.DrawWall(new Line(p4, p1), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                 //}
-                Mesh = PointMap.BuildMesh();
+
+                poly = PointMap.BuildPolygon();
+
+                Mesh = BuildMesh();
 
                 this.edges = PointMap.GetEdges();
                 
@@ -198,6 +203,24 @@ namespace AdventureLandLibrary.GameObjects
                     }
                 }
             }
+        }
+
+        public TriangleNet.Mesh BuildMesh()
+        {
+            var polygon = poly;
+
+            var constraintOptions = new TriangleNet.Meshing.ConstraintOptions();
+            constraintOptions.ConformingDelaunay = true;
+
+
+            var qualityOptions = new TriangleNet.Meshing.QualityOptions();
+            qualityOptions.MinimumAngle = 25;
+            qualityOptions.MaximumAngle = 180;
+            qualityOptions.MaximumArea = 2500;
+
+            var mesh = (TriangleNet.Mesh)TriangleNet.Geometry.ExtensionMethods.Triangulate(polygon.polygon, constraintOptions, qualityOptions);
+            return mesh;
+
         }
 
         public Point[] FindPath(Point start, Point end)
