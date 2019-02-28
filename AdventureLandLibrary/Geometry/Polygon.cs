@@ -9,18 +9,38 @@ namespace AdventureLandLibrary.Geometry
 {
     public class Polygon
     {
-        public PolygonPart[] parts;
+        public List<PolygonPart> parts;
 
         public TriangleNet.Geometry.Polygon polygon;
 
-        public Polygon(PolygonPart[] parts)
+        public Polygon(List<PolygonPart> parts)
         {
             this.parts = parts;
-            polygon = new TriangleNet.Geometry.Polygon(parts.Length);
+            polygon = new TriangleNet.Geometry.Polygon(parts.Count);
 
             foreach(var part in parts)
             {
                 polygon.Add(part.contour, part.IsHole);
+            }
+        }
+
+        public void RegeneratePolygon()
+        {
+            polygon = new TriangleNet.Geometry.Polygon(parts.Count);
+            foreach (var part in parts)
+            {
+                if(part.IsHole)
+                {
+                    polygon.Add(part.contour, part.IsHole);
+                }
+            }
+
+            foreach (var part in parts)
+            {
+                if (!part.IsHole)
+                {
+                    polygon.Add(part.contour, part.IsHole);
+                }
             }
         }
     }

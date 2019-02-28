@@ -95,7 +95,7 @@ namespace AdventureLandLibrary.Geometry
             }
         }
 
-        public PolygonPart[] BuildSubPolygons()
+        public List<PolygonPart> BuildSubPolygons()
         {
             var vertices = IdentifyVertices();
 
@@ -172,7 +172,7 @@ namespace AdventureLandLibrary.Geometry
                 }
             }
 
-            return parts.ToArray();
+            return parts;
         }
 
         public Polygon BuildPolygon()

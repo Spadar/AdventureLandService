@@ -122,8 +122,22 @@ namespace AdventureLandLibrary.GameObjects
                     PointMap.DrawWall(new Line(p4, p1), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
                 //}
 
+                System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+               
                 poly = PointMap.BuildPolygon();
 
+                //var testEntity = new Entity();
+                //testEntity.real_x = 0 + OffsetX;
+                //testEntity.real_y = 0 + OffsetY;
+                //testEntity.range = 30;
+                //var boundary = testEntity.GetBoundary();
+
+                //var boundaryPoly = new PolygonPart(boundary.ToArray());
+                //boundaryPoly.IsHole = true;
+                //poly.parts.Add(boundaryPoly);
+
+                //poly.RegeneratePolygon();
+                 
                 Mesh = BuildMesh();
 
                 this.edges = PointMap.GetEdges();
@@ -154,10 +168,10 @@ namespace AdventureLandLibrary.GameObjects
                 connection.SpawnID = (int)values[6].ToObject(typeof(int));
                 connection.ConnectedSpawnID = (int)values[5].ToObject(typeof(int));
 
-                if(connection.ConnectedSpawnID == 4 && connection.MapName == "level3")
-                {
-                    connection.ConnectedSpawnID = 2;
-                }
+                //if(connection.ConnectedSpawnID == 4 && connection.MapName == "level3")
+                //{
+                //    connection.ConnectedSpawnID = 2;
+                //}
 
                 connection.ConnectedMap = (string)values[4].ToObject(typeof(string));
                 var spawn = mapData["spawns"][connection.SpawnID];
@@ -214,9 +228,9 @@ namespace AdventureLandLibrary.GameObjects
 
 
             var qualityOptions = new TriangleNet.Meshing.QualityOptions();
-            qualityOptions.MinimumAngle = 25;
+            qualityOptions.MinimumAngle = 0;
             qualityOptions.MaximumAngle = 180;
-            qualityOptions.MaximumArea = 2500;
+            qualityOptions.MaximumArea = 250000000;
 
             var mesh = (TriangleNet.Mesh)TriangleNet.Geometry.ExtensionMethods.Triangulate(polygon.polygon, constraintOptions, qualityOptions);
             return mesh;

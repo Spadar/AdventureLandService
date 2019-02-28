@@ -9,14 +9,59 @@ using AdventureLandLibrary.Geometry;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using AdventureLandLibrary.Pathfinding;
+using System.Collections.Concurrent;
 
 namespace SignalR_Service
 {
     public class AdventurelandHub : Hub
     {
-        public void Send(string name, string message)
+        public static ConcurrentDictionary<string, string> IDTONameMapping = new ConcurrentDictionary<string, string>();
+
+        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
         {
-            Clients.All.addMessage(name, message);
+            IDTONameMapping.TryRemove(Context.ConnectionId, out string name);
+            if (stopCalled)
+            {
+                Console.WriteLine(String.Format("Client {0} explicitly closed the connection.", name));
+            }
+            else
+            {
+                Console.WriteLine(String.Format("Client {0} timed out.", name));
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
+
+        public void Initialize(string name)
+        {
+            var id = Context.ConnectionId;
+            if(!IDTONameMapping.ContainsKey(id))
+            {
+                IDTONameMapping.TryAdd(id, name);
+            }
+
+            Console.WriteLine(string.Format("Client {0} connected.", name));
+        }
+
+        public void SyncEntities(Entity[] entities)
+        {
+            if (IDTONameMapping.ContainsKey(Context.ConnectionId))
+            {
+                var name = IDTONameMapping[Context.ConnectionId];
+
+                if(Entities.PlayerEntities.ContainsKey(name))
+                {
+                    Entities.PlayerEntities[name] = entities;
+                }
+                else
+                {
+                    Entities.PlayerEntities.TryAdd(name, entities);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Connection not initialized attempting to sync entities.");
+            }
         }
 
         public void Ping()
@@ -40,20 +85,6 @@ namespace SignalR_Service
 
             foreach (var tri in mesh.Triangles)
             {
-                //var centroid = new Point(tri.GetCentroid(), map.OffsetX, map.OffsetY);
-
-                //for (var i = 0; i < 3; i++)
-                //{
-                //    var neighbor = tri.GetNeighbor(i);
-
-                //    if (neighbor != null)
-                //    {
-                //        var ncentroid = new Point(((TriangleNet.Topology.Triangle)neighbor).GetCentroid(), map.OffsetX, map.OffsetY);
-
-                //        var centroidLine = new Line(centroid, ncentroid);
-                //        meshLines.Add(centroidLine);
-                //    }
-                //}
 
                 var v1 = new Point(tri.GetVertex(0), map.OffsetX, map.OffsetY);
                 var v2 = new Point(tri.GetVertex(1), map.OffsetX, map.OffsetY);
@@ -63,17 +94,10 @@ namespace SignalR_Service
                 var edge2 = new Line(v2, v3);
                 var edge3 = new Line(v3, v1);
 
-                //var c1 = new Line(v1, centroid);
-                //var c2 = new Line(v2, centroid);
-                //var c3 = new Line(v3, centroid);
 
                 meshLines.Add(edge1);
                 meshLines.Add(edge2);
                 meshLines.Add(edge3);
-
-                //meshLines.Add(c1);
-                //meshLines.Add(c2);
-                //meshLines.Add(c3);
             }
 
             Clients.Caller.GetMesh(meshLines);
@@ -94,23 +118,10 @@ namespace SignalR_Service
                 string mapFrom = obj.From.Map;
                 string mapTo = obj.To.Map;
 
-                //Console.WriteLine("Finding path!");
-                //if (!Maps.MapDictionary.ContainsKey(mapID))
-                //{
-                //    var newMap = new Map(mapID);
-                //    Maps.MapDictionary.Add(mapID, newMap);
-                //}
-
-                //var map = Maps.MapDictionary[mapID];
-
-                //var path = map.FindPath(from, to);
-                //var smoothed = map.SmoothPath(path);
-
                 var path = Maps.FindPath(from, to, mapFrom, mapTo, false);
 
                 Clients.Caller.PathFound(path);
                 timer.Stop();
-                Console.WriteLine("Path found in {0} ms", timer.ElapsedMilliseconds);
             }
             catch(Exception ex)
             {

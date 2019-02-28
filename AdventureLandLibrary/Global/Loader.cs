@@ -41,6 +41,38 @@ namespace AdventureLandLibrary.Global
             return directory;
         }
 
+        public static dynamic GetLiveData()
+        {
+            dynamic newData = null;
+
+            try
+            {
+
+                string data = DownloadFile("data.js");
+
+                if (!string.IsNullOrEmpty(data))
+                {
+
+                    data = data.Replace("var G=", "");
+                    data = data.Replace("};", "}");
+
+                    newData = JObject.Parse(data);
+                }
+            }
+            catch
+            {
+
+            }
+
+            return newData;
+
+        }
+
+        public static void UpdateData()
+        {
+            _data = GetData();
+        }
+
         private static dynamic GetData()
         {
 

@@ -1,0 +1,6 @@
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Clipper\bin\Debug\Clipper.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Clipper\bin\Debug\Clipper.pdb
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Clipper\obj\Debug\Clipper.csprojAssemblyReference.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Clipper\obj\Debug\Clipper.csproj.CoreCompileInputs.cache
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Clipper\obj\Debug\Clipper.dll
+C:\Users\lorna\Documents\GitHub\AdventureLandService\Clipper\obj\Debug\Clipper.pdb

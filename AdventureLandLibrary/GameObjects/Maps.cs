@@ -17,15 +17,39 @@ namespace AdventureLandLibrary.GameObjects
 
         public static void Load()
         {
-            MapDictionary = new Dictionary<string, Map>();
+            MapDictionary = LoadMaps();
+
+            world = new WorldGraph();
+        }
+
+        public static void TryUpdateData()
+        {
+            var newData = Loader.GetLiveData();
+
+            if(newData != null && newData.version != Loader.data.version)
+            {
+                Console.WriteLine("New Version Detected, Loading!");
+                Loader.UpdateData();
+                Load();
+            }
+
+            
+        }
+
+        public static Dictionary<string, Map> LoadMaps()
+        {
+            System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
+
+            timer.Start();
+            var tempMapDictionary = new Dictionary<string, Map>();
 
             //var test = new Map("level2");
 
             var maps = ((JObject)Loader.data.geometry).Properties().Select(p => p.Name).ToList();
 
-            var excludeMaps = new string[]{"original_main"};
+            var excludeMaps = new string[] { "original_main" };
 
-            foreach(var exclude in excludeMaps)
+            foreach (var exclude in excludeMaps)
             {
                 maps.Remove(exclude);
             }
@@ -37,31 +61,16 @@ namespace AdventureLandLibrary.GameObjects
                 try
                 {
                     var mapObj = new Map(mapName);
-                    MapDictionary.Add(mapName, mapObj);
+                    tempMapDictionary.Add(mapName, mapObj);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Failed to initialize: {0}", mapName);
                 }
             });
+            timer.Stop();
 
-            //foreach (var mapName in maps)
-            //{
-            //    var map = (JObject)Loader.data.maps[mapName];
-            //    try
-            //    {
-            //        var mapObj = new Map(mapName);
-            //        MapDictionary.Add(mapName, mapObj);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine("Failed to initialize: {0}", mapName);
-            //    }
-            //}
-
-            world = new WorldGraph();
-
-            //var testPath = FindPath(new Point(0, 0), new Point(-361, 196), "main", "level1", true);
+            return tempMapDictionary;
         }
 
         public static PathNode[] FindPath(Point Start, Point End, string StartMap, string EndMap, bool FullPath)

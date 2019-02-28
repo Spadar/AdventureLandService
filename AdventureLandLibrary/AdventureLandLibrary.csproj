@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerations\PointType.cs" />
+    <Compile Include="GameObjects\Entities.cs" />
+    <Compile Include="GameObjects\Entity.cs" />
     <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameObjects\Maps.cs" />
     <Compile Include="Geometry\GraphNode.cs" />
