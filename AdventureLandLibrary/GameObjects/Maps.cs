@@ -118,9 +118,9 @@ namespace AdventureLandLibrary.GameObjects
 
                         var smoothedPath = map.SmoothPath(curPath);
 
-                        for(var x = 0; x < smoothedPath.Length; x++)
+                        for(var x = 0; x < curPath.Length; x++)
                         {
-                            var point = smoothedPath[x];
+                            var point = curPath[x];
 
                             var pathNode = new PathNode(point);
                             pathNode.Action = "Move";

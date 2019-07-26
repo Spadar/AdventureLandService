@@ -107,6 +107,7 @@ namespace SignalR_Service
         {
             try
             {
+                Console.WriteLine("test");
                 System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
                 timer.Start();
                 object parsed = JsonConvert.DeserializeObject(args);

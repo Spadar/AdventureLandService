@@ -113,11 +113,11 @@ namespace AdventureLandLibrary.Pathfinding
 
                 newPath.Add(new Point((int)currentNode.X - xOffset, (int)currentNode.Y - yOffset));
 
-                int funnelLeftIndex = 1;
-                int funnelRightIndex = 1;
+                int funnelLeftIndex = 0;
+                int funnelRightIndex = 0;
 
-                int curFunnelLeftIndex = 1;
-                int curFunnelRightIndex = 1;
+                int curFunnelLeftIndex = 0;
+                int curFunnelRightIndex = 0;
 
                 LineD funnelLeft = new LineD(currentNode, portals[0].P2);
                 LineD funnelRight = new LineD(currentNode, portals[0].P1);

@@ -38,26 +38,42 @@ namespace AdventureLandLibrary.GameObjects
 
         public Map(string MapID)
         {
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+            
+
             Console.WriteLine("Initializing Map: {0}", MapID);
             this.MapID = MapID;
 
             var mapData = (JObject)(Loader.data.geometry)[MapID];
+            var mapDef = (JObject)(Loader.data.maps)[MapID];
 
-            if(mapData != null)
+            if (mapData != null)
             {
-                var MinX = (int)((dynamic)mapData["min_x"]);
-                var MinY = (int)((dynamic)mapData["min_y"]);
+                var MinX = (int)(((dynamic)mapData["min_x"]) ?? -1000);
+                var MinY = (int)(((dynamic)mapData["min_y"]) ?? -1000);
 
-                var MaxX = (int)((dynamic)mapData["max_x"]);
-                var MaxY = (int)((dynamic)mapData["max_y"]);
+                var MaxX = (int)(((dynamic)mapData["max_x"]) ?? 1000);
+                var MaxY = (int)(((dynamic)mapData["max_y"]) ?? 1000);
 
-                Width = Math.Abs((int)((dynamic)mapData["max_x"])) + Math.Abs((int)((dynamic)mapData["min_x"]));
-                Height = Math.Abs((int)((dynamic)mapData["max_y"])) + Math.Abs((int)((dynamic)mapData["min_y"]));
+                if((dynamic)mapDef["no_bounds"] == true)
+                {
+                    MinX = -1000;
+                    MaxX = 1000;
 
-                OffsetX = Math.Abs((int)((dynamic)mapData["min_x"]));
-                OffsetY = Math.Abs((int)((dynamic)mapData["min_y"]));
+                    MinY = -1000;
+                    MaxY = 1000;
+                }
+
+                Width = Math.Abs(MaxX) + Math.Abs(MinX);
+                Height = Math.Abs(MaxY) + Math.Abs(MinY);
+
+                OffsetX = Math.Abs(MinX);
+                OffsetY = Math.Abs(MinY);
+
 
                 List<Line> lines = new List<Line>();
+
                 if (mapData.Properties().Where(p => p.Name == "x_lines").FirstOrDefault() != null)
                 {
                     foreach (var xLine in mapData["x_lines"])
@@ -108,35 +124,19 @@ namespace AdventureLandLibrary.GameObjects
 
                 PointMap.FillExterior();
 
-                //if(PointMap.IsInsideMap(new Point(MinX, MinY)))
-                //{
-                    //Draw map edges as walls to contain map.
-                    var p1 = new Point(MinX, MinY);
-                    var p2 = new Point(MinX, MaxY);
-                    var p3 = new Point(MaxX, MaxY);
-                    var p4 = new Point(MaxX, MinY);
+                var p1 = new Point(MinX, MinY);
+                var p2 = new Point(MinX, MaxY);
+                var p3 = new Point(MaxX, MaxY);
+                var p4 = new Point(MaxX, MinY);
 
-                    PointMap.DrawWall(new Line(p1, p2), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
-                    PointMap.DrawWall(new Line(p2, p3), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
-                    PointMap.DrawWall(new Line(p3, p4), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
-                    PointMap.DrawWall(new Line(p4, p1), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
-                //}
+                PointMap.DrawWall(new Line(p1, p2), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+                PointMap.DrawWall(new Line(p2, p3), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+                PointMap.DrawWall(new Line(p3, p4), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
+                PointMap.DrawWall(new Line(p4, p1), xBufferMin, xBufferMax, yBufferMin, yBufferMax);
 
                 System.Diagnostics.Stopwatch timer = new System.Diagnostics.Stopwatch();
                
                 poly = PointMap.BuildPolygon();
-
-                //var testEntity = new Entity();
-                //testEntity.real_x = 0 + OffsetX;
-                //testEntity.real_y = 0 + OffsetY;
-                //testEntity.range = 30;
-                //var boundary = testEntity.GetBoundary();
-
-                //var boundaryPoly = new PolygonPart(boundary.ToArray());
-                //boundaryPoly.IsHole = true;
-                //poly.parts.Add(boundaryPoly);
-
-                //poly.RegeneratePolygon();
                  
                 Mesh = BuildMesh();
 
@@ -147,6 +147,10 @@ namespace AdventureLandLibrary.GameObjects
                 graph = new MapGraph(Mesh, PointMap, OffsetX, OffsetY);
 
                 GetMapConnections();
+
+                stopwatch.Stop();
+
+                Console.WriteLine("Initialized Map: {0} in {1}ms", MapID, stopwatch.ElapsedMilliseconds);
             }
             else
             {
@@ -230,7 +234,7 @@ namespace AdventureLandLibrary.GameObjects
             var qualityOptions = new TriangleNet.Meshing.QualityOptions();
             qualityOptions.MinimumAngle = 0;
             qualityOptions.MaximumAngle = 180;
-            qualityOptions.MaximumArea = 250000000;
+            qualityOptions.MaximumArea = 250000;
 
             var mesh = (TriangleNet.Mesh)TriangleNet.Geometry.ExtensionMethods.Triangulate(polygon.polygon, constraintOptions, qualityOptions);
             return mesh;

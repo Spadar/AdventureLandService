@@ -59,7 +59,13 @@ namespace AdventureLandLibrary.Pathfinding
                     var connectionID = mapMapping[connection];
 
                     //Connect to all outbound maps
-                    var connectedList = Maps.MapDictionary[connection.ConnectedMap].Connections.Where(c => c.SpawnID == connection.ConnectedSpawnID && c.ConnectedSpawnID == connection.SpawnID).ToList();
+
+                    var connectedList = new List<MapConnection>();
+
+                    if (Maps.MapDictionary.Keys.Contains(connection.ConnectedMap))
+                    {
+                        connectedList = Maps.MapDictionary[connection.ConnectedMap].Connections.Where(c => c.SpawnID == connection.ConnectedSpawnID && c.ConnectedSpawnID == connection.SpawnID).ToList();
+                    }
 
                     if (connectedList.Count > 0)
                     {
