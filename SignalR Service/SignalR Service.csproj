@@ -89,6 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Example Client Script\ALBaseScript.js" />
+    <Content Include="Example Client Script\PathfindingExample.js" />
+    <Content Include="Example Client Script\SignalR.js" />
     <Content Include="Scripts\jquery-1.6.4-vsdoc.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
